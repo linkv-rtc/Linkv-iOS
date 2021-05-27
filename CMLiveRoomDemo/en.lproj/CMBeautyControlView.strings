@@ -1,0 +1,13 @@
+
+/* Class = "UILabel"; text = "美颜级别"; ObjectID = "62S-O0-IIh"; */
+"62S-O0-IIh.text" = "Beauty Level";
+
+/* Class = "UILabel"; text = "色调级别"; ObjectID = "bpt-af-nSc"; */
+"bpt-af-nSc.text" = "Tone Level";
+
+/* Class = "UILabel"; text = "亮度级别"; ObjectID = "sd3-Rs-4wd"; */
+"sd3-Rs-4wd.text" = "Bright Level";
+
+
+/* Class = "UIButton"; normalTitle = "亮度级别"; ObjectID = ""EHT-Ow-wyw"; */
+"EHT-Ow-wyw.normalTitle" = "Hide Control View";

@@ -1,0 +1,21 @@
+/* Class = "UILabel"; text = "用户ID"; ObjectID = "D2e-gd-Zn5"; */
+"D2e-gd-Zn5.text" = "用户ID";
+
+/* Class = "UILabel"; text = "视频码率"; ObjectID = "JLO-yx-P1e"; */
+"JLO-yx-P1e.text" = "视频码率";
+
+/* Class = "UILabel"; text = "音频码率"; ObjectID = "Jg2-uB-Cw8"; */
+"Jg2-uB-Cw8.text" = "音频码率";
+
+/* Class = "UILabel"; text = "音频丢包"; ObjectID = "ce7-Ce-sG4"; */
+"ce7-Ce-sG4.text" = "音频丢包";
+
+/* Class = "UILabel"; text = "帧率"; ObjectID = "db1-K5-chy"; */
+"db1-K5-chy.text" = "帧率";
+
+/* Class = "UILabel"; text = "视频丢包"; ObjectID = "e2J-Cz-eci"; */
+"e2J-Cz-eci.text" = "视频丢包";
+
+/* Class = "UILabel"; text = "RTT(V/A)"; ObjectID = "l7c-it-VX1"; */
+"l7c-it-VX1.text" = "RTT(V/A)";
+

@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings
+  CMLiveRoomDemo
+
+  Created by jfdreamyang on 2020/3/23.
+  Copyright © 2020 Liveme. All rights reserved.
+*/
+
+
+"start_streaming" = "Start Streaming";
+"look_streaming" = "Look Streaming";
+"streaming_type" = "Choose an AV streaming type";
+"mention" = "you can't change streaming type in live streaming";
+"normal_streaming" = "Live streaming";
+"conference" = "AV Conference";
+"audio_mode" = "Audio Conference";
+"cancel" = "Cancel";
+"network_error" = "The network is abnormal, please check the device connection";
+"start_living" = "Start";
+"user_id" = "UserID:";
+"person_surpass" = "Only four people are supported in live streaming";
+"send_sei" = "Send SEI";
+"receive_sei" = "Receive SEI:";
+"resolution_adaptation" = "Resolution adaptation";
+"video_parameter" = "Video Parameter";
+"video_angle" = "Video Angle";
+"accompaniment_demo" = "Accompaniment demo";
+"external_audio_input" = "External Audio Input";
+"statistics" = "Statistics View";
+"join_room_setting" = "Please set before joining the room";
+"accompaniment_demo_mention" = "The accompaniment function can only be turned on after the audio and video are published";
+"0_degrees" = "0 degrees";
+"90_degrees" = "90 degrees";
+"180_degrees" = "180 degrees";
+"270_degrees" = "270 degrees";
+"app_name" = "App Name";
+"setting_version" = "VERSION";
+"setting_environment" = "ENVIRONMENT";
+"setting_about" = "ABOUT";
+"setting_app_environment" = "App Environment";
+"setting_app_type" = "App Type";
+
+"linkv_setting" = "Setting";
+
+"setting_prudtion" = "Production";
+"setting_test" = "Test";
+"setting_china" = "China";
+"setting_international" = "International";
+
+"av_environment_setting" = "Streaming Environment Setting";
+"setting_default_environment" = "Prodution environment are used by default";
+"setting_default_app_type"= "System language setting are used by default";
+"copy_to_clipboard" = "Copied to clipboard";
+"volume_control_play" = "Play";
+"volume_control_pause" = "Pause";
+
+"room_list" = "Room List";
+"room_refresh" = "Refresh";
+
+"get_room_success" = "Room list acquisition success";
+"get_room_failure" = "Room list acquisition failure";
+
+"Marketing Cooperation" = "Marketing Cooperation";
+
+
+"Live close" = "Close";
+"Live open" = "Open";
+"Live default" = "Default";
+"Live Role Me" = "Me";
+"Live Role Host" = "Host";
+
+
+"CMVideoDegradationPreference_1" = "Auto Resolution";
+"CMVideoDegradationPreference_2" = "Auto Framerate";
+"CMVideoDegradationPreference_3" = "Close";

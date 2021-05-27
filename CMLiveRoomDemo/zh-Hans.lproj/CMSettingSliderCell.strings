@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "123232"; ObjectID = "1ig-zE-fa9"; */
+"1ig-zE-fa9.text" = "123232";
+
+/* Class = "UILabel"; text = "15"; ObjectID = "F7q-wm-Cw4"; */
+"F7q-wm-Cw4.text" = "15";
+
+/* Class = "UIButton"; normalTitle = "确定"; ObjectID = "O6U-o7-v2p"; */
+"O6U-o7-v2p.normalTitle" = "确定";
+
+/* Class = "UILabel"; text = "分辨率"; ObjectID = "VxJ-53-9Lt"; */
+"VxJ-53-9Lt.text" = "分辨率";
+
+/* Class = "UILabel"; text = "帧率"; ObjectID = "av3-Ri-yMP"; */
+"av3-Ri-yMP.text" = "帧率";
+
+/* Class = "UILabel"; text = "码率"; ObjectID = "bnO-uw-txg"; */
+"bnO-uw-txg.text" = "码率";
+
+/* Class = "UILabel"; text = "720x1280"; ObjectID = "sEC-fp-I7H"; */
+"sEC-fp-I7H.text" = "720x1280";

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe" customClass="CMTableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="63"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fec-mt-4QT">
+                    <rect key="frame" x="11" y="22" width="244" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="240" id="T62-nn-rjg"/>
+                        <constraint firstAttribute="height" constant="20" id="j3F-1w-SZi"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="PoB-Zz-KEw">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Oqd-5J-w9K" customClass="SYFlatButton">
+                    <rect key="frame" x="407" y="19" width="60" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="shN-hH-yeL"/>
+                        <constraint firstAttribute="height" constant="26" id="zuf-N8-LHq"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" title="进入" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eNk-HU-AkR">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="momentary" value="YES"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundNormalColor">
+                            <color key="value" red="0.066666666669999999" green="0.80392156859999997" blue="0.6588235294" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundHighlightColor">
+                            <color key="value" red="0.062745098040000002" green="0.67843137249999996" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="onAnimateDuration">
+                            <real key="value" value="0.10000000000000001"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="offAnimateDuration">
+                            <real key="value" value="0.10000000000000001"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleNormalColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleHighlightColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="joinButtonClick:" target="c22-O7-iKe" id="BAf-Ta-Jgs"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Oqd-5J-w9K" secondAttribute="trailing" constant="13" id="5xd-8X-pUW"/>
+                <constraint firstItem="Oqd-5J-w9K" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="oDg-hH-2Hz"/>
+                <constraint firstItem="fec-mt-4QT" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="13" id="vmm-f8-WWx"/>
+                <constraint firstItem="fec-mt-4QT" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="zrm-W7-kdA"/>
+            </constraints>
+            <connections>
+                <outlet property="joinButton" destination="Oqd-5J-w9K" id="RmZ-S3-AKX"/>
+                <outlet property="roomLab" destination="fec-mt-4QT" id="zcn-wy-CMJ"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="49.5"/>
+        </customView>
+    </objects>
+</document>

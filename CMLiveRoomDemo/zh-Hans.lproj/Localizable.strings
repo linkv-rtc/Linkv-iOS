@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings
+  CMLiveRoomDemo
+
+  Created by jfdreamyang on 2020/3/23.
+  Copyright © 2020 Liveme. All rights reserved.
+*/
+
+"start_streaming" = "我要开播";
+"look_streaming" = "观看直播";
+"streaming_type" = "选择音视频直播类型";
+"mention" = "直播过程中不允许修改直播类型";
+"normal_streaming" = "普通直播";
+"conference" = "会议模式";
+"audio_mode" = "音频直播";
+"cancel" = "取消";
+"network_error" = "网络异常，请检查设备连接情况";
+"start_living" = "开始直播";
+"user_id" = "用户ID:";
+"person_surpass" = "直播模式目前仅支持 4 人同时互动";
+"send_sei" = "发送SEI数据";
+"receive_sei" = "收到SEI数据:";
+"resolution_adaptation" = "分辨率自适应";
+"video_parameter" = "视频参数设置";
+"video_angle" = "输出视频角度";
+"accompaniment_demo" = "伴奏演示";
+"external_audio_input" = "外置音频输入";
+"statistics" = "统计视图";
+"join_room_setting" = "请在加入房间前设置";
+"linkv_setting" = "设置";
+"accompaniment_demo_mention" = "伴奏功能需要先发布音视频之后才能打开";
+"0_degrees" = "0 度";
+"90_degrees" = "90 度";
+"180_degrees" = "180 度";
+"270_degrees" = "270 度";
+"app_name" = "App 名称";
+"setting_version" = "版本";
+"setting_environment" = "环境";
+"setting_app_environment" = "App 环境";
+"setting_app_type" = "App 类型";
+"setting_about" = "关于";
+
+"setting_prudtion" = "正式环境";
+"setting_test" = "测试环境";
+"setting_china" = "中国";
+"setting_international" = "国际";
+
+"av_environment_setting" = "音视频环境选择";
+"setting_default_environment" = "LinkV 默认使用正式环境";
+"setting_default_app_type" = "LinkV 默认根据用户设置语言选择环境";
+"copy_to_clipboard" = "已拷贝至剪贴板";
+
+"volume_control_play" = "播放";
+"volume_control_pause" = "暂停";
+
+"room_list" = "开播列表";
+"room_refresh" = "刷新";
+"get_room_success" = "获取房间列表成功";
+"get_room_failure" = "获取房间列表失败";
+
+"Marketing Cooperation" = "市场合作";
+
+
+"Live close" = "关闭";
+"Live open" = "打开";
+"Live default" = "默认";
+
+"Live Role Me" = "我";
+"Live Role Host" = "主播";
+
+
+"CMVideoDegradationPreference_1" = "自适应分辨率";
+"CMVideoDegradationPreference_2" = "自适应帧率";
+"CMVideoDegradationPreference_3" = "关闭";

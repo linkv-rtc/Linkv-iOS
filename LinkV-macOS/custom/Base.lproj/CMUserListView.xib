@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe" customClass="CMUserListView">
+            <rect key="frame" x="0.0" y="0.0" width="374" height="266"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gM-G0-xsw">
+                    <rect key="frame" x="0.0" y="0.0" width="374" height="224"/>
+                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="vh1-mX-4Vd">
+                        <rect key="frame" x="0.0" y="0.0" width="374" height="224"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="lrB-dM-Vvl">
+                                <rect key="frame" x="0.0" y="0.0" width="374" height="224"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn width="371" minWidth="40" maxWidth="1000" id="N0K-zB-Pmr">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="pNA-Zw-AO0">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                    </tableColumn>
+                                </tableColumns>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Iqd-06-OOh">
+                        <rect key="frame" x="0.0" y="202" width="327" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="rNw-5n-yqf">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="5wF-5c-Lke">
+                    <rect key="frame" x="330" y="230" width="26" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="26" id="38c-vB-LQn"/>
+                        <constraint firstAttribute="height" constant="26" id="fvs-hF-eI8"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="close_ico" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="vwl-1B-hPw">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="closeButtonClick:" target="c22-O7-iKe" id="QyJ-H7-4NK"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IW1-Jc-iiv">
+                    <rect key="frame" x="135" y="235" width="104" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="UcD-Qc-7Z6"/>
+                        <constraint firstAttribute="width" constant="100" id="npe-Ds-Zho"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="用户列表" id="Z7q-Ta-neu">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.84705882352941175" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="9gM-G0-xsw" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="2YP-Al-ooc"/>
+                <constraint firstItem="IW1-Jc-iiv" firstAttribute="centerX" secondItem="c22-O7-iKe" secondAttribute="centerX" id="30q-dr-JyM"/>
+                <constraint firstItem="IW1-Jc-iiv" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="15" id="GeY-Ru-2AW"/>
+                <constraint firstItem="9gM-G0-xsw" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="42" id="N7j-h6-0fn"/>
+                <constraint firstAttribute="trailing" secondItem="9gM-G0-xsw" secondAttribute="trailing" id="P4H-lS-kU9"/>
+                <constraint firstAttribute="bottom" secondItem="9gM-G0-xsw" secondAttribute="bottom" id="RhF-Ke-QZl"/>
+                <constraint firstAttribute="trailing" secondItem="5wF-5c-Lke" secondAttribute="trailing" constant="18" id="VPg-hR-NsU"/>
+                <constraint firstItem="5wF-5c-Lke" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="10" id="mEt-61-TjV"/>
+            </constraints>
+            <connections>
+                <outlet property="tableView" destination="lrB-dM-Vvl" id="vAh-sp-xct"/>
+            </connections>
+            <point key="canvasLocation" x="61" y="109"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="close_ico" width="26" height="26"/>
+    </resources>
+</document>

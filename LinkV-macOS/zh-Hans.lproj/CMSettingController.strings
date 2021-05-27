@@ -1,0 +1,54 @@
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "6ds-BJ-3wp"; */
+"6ds-BJ-3wp.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "7O4-2f-TgY"; */
+"7O4-2f-TgY.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "关于"; ObjectID = "9Tj-dm-vRe"; */
+"9Tj-dm-vRe.title" = "关于";
+
+/* Class = "NSTextFieldCell"; title = "关于"; ObjectID = "EDg-SN-e7X"; */
+"EDg-SN-e7X.title" = "关于";
+
+/* Class = "NSTextFieldCell"; title = "版本"; ObjectID = "F0q-Mz-88b"; */
+"F0q-Mz-88b.title" = "版本";
+
+/* Class = "NSTextFieldCell"; title = "App  类型"; ObjectID = "HAv-IB-hIX"; */
+"HAv-IB-hIX.title" = "App  类型";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "OAb-Gc-h99"; */
+"OAb-Gc-h99.title" = "Item 3";
+
+/* Class = "NSTextFieldCell"; title = "环境"; ObjectID = "Rtf-AK-nq8"; */
+"Rtf-AK-nq8.title" = "环境";
+
+/* Class = "NSTextFieldCell"; title = "1.0.3"; ObjectID = "Z2a-17-Tni"; */
+"Z2a-17-Tni.title" = "1.0.3";
+
+/* Class = "NSTextFieldCell"; title = "SDK"; ObjectID = "Zwg-5F-NYC"; */
+"Zwg-5F-NYC.title" = "SDK";
+
+/* Class = "NSTextFieldCell"; title = "App"; ObjectID = "b2e-bs-oEk"; */
+"b2e-bs-oEk.title" = "App";
+
+/* Class = "NSTextFieldCell"; title = "App 名称"; ObjectID = "epK-2s-UYC"; */
+"epK-2s-UYC.title" = "App 名称";
+
+/* Class = "NSTextFieldCell"; title = "LinkV"; ObjectID = "kTZ-Yn-Ut9"; */
+"kTZ-Yn-Ut9.title" = "LinkV";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "peV-oZ-yp7"; */
+"peV-oZ-yp7.title" = "Item 3";
+
+/* Class = "NSTextFieldCell"; title = "Label"; ObjectID = "qNU-GA-HNs"; */
+"qNU-GA-HNs.title" = "Label";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "sFV-eL-ry9"; */
+"sFV-eL-ry9.title" = "Item 2";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "wSU-Gb-xjv"; */
+"wSU-Gb-xjv.title" = "Item 1";
+
+/* Class = "NSTextFieldCell"; title = "App 环境"; ObjectID = "wug-xx-ZIf"; */
+"wug-xx-ZIf.title" = "App 环境";

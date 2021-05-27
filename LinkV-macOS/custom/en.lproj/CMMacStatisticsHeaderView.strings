@@ -1,0 +1,21 @@
+
+/* Class = "NSTextFieldCell"; title = "用户ID"; ObjectID = "CAI-o9-8WJ"; */
+"CAI-o9-8WJ.title" = "UserID";
+
+/* Class = "NSTextFieldCell"; title = "音频丢包"; ObjectID = "Ehm-7S-UXu"; */
+"Ehm-7S-UXu.title" = "A/loss";
+
+/* Class = "NSTextFieldCell"; title = "RTT/(V/A)"; ObjectID = "MYb-cj-rLe"; */
+"MYb-cj-rLe.title" = "RTT/(V/A)";
+
+/* Class = "NSTextFieldCell"; title = "音频码率"; ObjectID = "Pep-kq-06m"; */
+"Pep-kq-06m.title" = "A/kbps";
+
+/* Class = "NSTextFieldCell"; title = "帧率"; ObjectID = "fBZ-8L-cxF"; */
+"fBZ-8L-cxF.title" = "V/fps";
+
+/* Class = "NSTextFieldCell"; title = "视频码率"; ObjectID = "lC5-n0-eKD"; */
+"lC5-n0-eKD.title" = "V/kbps";
+
+/* Class = "NSTextFieldCell"; title = "视频丢包"; ObjectID = "xFI-Ww-6wj"; */
+"xFI-Ww-6wj.title" = "V/loss";

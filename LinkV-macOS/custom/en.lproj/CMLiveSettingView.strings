@@ -1,0 +1,72 @@
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "0OT-8y-Vtj"; */
+"0OT-8y-Vtj.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "2SU-Ni-Fg3"; */
+"2SU-Ni-Fg3.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "帧率设置"; ObjectID = "Be8-bt-gV7"; */
+"Be8-bt-gV7.title" = "FPS";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "Cg0-Xh-eef"; */
+"Cg0-Xh-eef.title" = "Item 3";
+
+/* Class = "NSTextFieldCell"; title = "视频设备选择"; ObjectID = "DSF-mx-yBc"; */
+"DSF-mx-yBc.title" = "Video Device";
+
+/* Class = "NSButtonCell"; title = "关闭"; ObjectID = "IXL-aB-GtF"; */
+"IXL-aB-GtF.title" = "Close";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "K5U-YP-rpl"; */
+"K5U-YP-rpl.title" = "Item 2";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "NMH-aJ-uxp"; */
+"NMH-aJ-uxp.title" = "Item 3";
+
+/* Class = "NSTextFieldCell"; title = "统计视图"; ObjectID = "OAj-f7-eNK"; */
+"OAj-f7-eNK.title" = "Statistics View";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Oyc-lU-kNB"; */
+"Oyc-lU-kNB.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Pd5-Se-884"; */
+"Pd5-Se-884.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "QFJ-tN-zX5"; */
+"QFJ-tN-zX5.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "音频设备选择"; ObjectID = "TGM-US-mWy"; */
+"TGM-US-mWy.title" = "Audio Device";
+
+/* Class = "NSTextFieldCell"; title = "设置"; ObjectID = "Uft-8S-4m1"; */
+"Uft-8S-4m1.title" = "Setting";
+
+/* Class = "NSTextFieldCell"; title = "分辨率设置"; ObjectID = "aG6-5Y-Ynb"; */
+"aG6-5Y-Ynb.title" = "Framesize";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "b5f-wc-YQj"; */
+"b5f-wc-YQj.title" = "Item 3";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "cOa-Qs-sRL"; */
+"cOa-Qs-sRL.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "d4d-uR-hY7"; */
+"d4d-uR-hY7.title" = "Item 3";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "dxT-ye-Gcv"; */
+"dxT-ye-Gcv.title" = "Item 2";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "eOV-el-E1B"; */
+"eOV-el-E1B.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "h0F-a3-tPg"; */
+"h0F-a3-tPg.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "码率设置"; ObjectID = "pRR-Ts-ELN"; */
+"pRR-Ts-ELN.title" = "Bitrate";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "wTJ-6w-JL4"; */
+"wTJ-6w-JL4.title" = "Item 3";
+
+
+"2VK-YO-PEi.title" = "Accompaniment demo";

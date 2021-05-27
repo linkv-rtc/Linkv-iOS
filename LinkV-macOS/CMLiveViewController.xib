@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CMLiveViewController">
+            <connections>
+                <outlet property="cameraButton" destination="EcQ-Kp-d0Q" id="7Ob-Vq-H2Z"/>
+                <outlet property="controlView" destination="BJd-7a-EDd" id="gv0-i6-gsk"/>
+                <outlet property="documentView" destination="jbh-Ka-bA7" id="wmT-hX-BbE"/>
+                <outlet property="hangupButton" destination="QJN-bC-QY3" id="5hL-oY-slW"/>
+                <outlet property="lianmaiButton" destination="ZdJ-uL-Sti" id="bnZ-OO-24c"/>
+                <outlet property="rightScrollView" destination="p5s-oy-c8P" id="iPW-Bn-wZH"/>
+                <outlet property="roomIdLab" destination="cN8-Nc-4Pa" id="kwo-1s-Iwv"/>
+                <outlet property="settingButton" destination="0Qm-do-Nfy" id="R5f-tS-jcN"/>
+                <outlet property="speakerButton" destination="dbE-HS-XXP" id="6Ms-rg-gJn"/>
+                <outlet property="toastLabel" destination="vSD-S8-Okj" id="epw-7F-ika"/>
+                <outlet property="userIdLab" destination="dTm-2F-0Wl" id="zfs-K5-aKp"/>
+                <outlet property="userlistButton" destination="5fA-Kt-Sc7" id="Yaj-kh-ftM"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="624" height="297"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p5s-oy-c8P">
+                    <rect key="frame" x="384" y="0.0" width="240" height="297"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="gdO-If-2Xa">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="297"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view id="jbh-Ka-bA7" customClass="CMView">
+                                <rect key="frame" x="0.0" y="0.0" width="242" height="1352"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </view>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="o9N-Fc-Ubc">
+                        <rect key="frame" x="0.0" y="281" width="240" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="nGZ-j8-R4E">
+                        <rect key="frame" x="224" y="0.0" width="16" height="297"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BJd-7a-EDd">
+                    <rect key="frame" x="61" y="20" width="501" height="75"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <button fixedFrame="YES" tag="1001" translatesAutoresizingMaskIntoConstraints="NO" id="ZdJ-uL-Sti">
+                            <rect key="frame" x="12" y="20" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_lianmai_button" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="rel-NN-LjR">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="lianmaiButtonClick:" target="-2" id="Boi-Q0-dpA"/>
+                            </connections>
+                        </button>
+                        <button fixedFrame="YES" tag="1002" translatesAutoresizingMaskIntoConstraints="NO" id="dbE-HS-XXP">
+                            <rect key="frame" x="93" y="19" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_speaker" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="4JG-An-seC">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="speakerButtonClick:" target="-2" id="A64-tk-Qa9"/>
+                            </connections>
+                        </button>
+                        <button fixedFrame="YES" tag="1003" translatesAutoresizingMaskIntoConstraints="NO" id="5fA-Kt-Sc7">
+                            <rect key="frame" x="162" y="20" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_duorenlianmai_ico" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="7Up-GM-Vmb">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="userlistButtonClick:" target="-2" id="5MB-Md-eVb"/>
+                            </connections>
+                        </button>
+                        <button fixedFrame="YES" tag="1004" translatesAutoresizingMaskIntoConstraints="NO" id="EcQ-Kp-d0Q">
+                            <rect key="frame" x="238" y="19" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_live_camera" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VPF-gv-fID">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="cameraButtonClick:" target="-2" id="Z6q-k0-r67"/>
+                            </connections>
+                        </button>
+                        <button fixedFrame="YES" tag="1005" translatesAutoresizingMaskIntoConstraints="NO" id="0Qm-do-Nfy">
+                            <rect key="frame" x="326" y="19" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_live_setting" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6J6-6f-B57">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="settingButtonClick:" target="-2" id="J7o-oC-g6c"/>
+                            </connections>
+                        </button>
+                        <button fixedFrame="YES" tag="1006" translatesAutoresizingMaskIntoConstraints="NO" id="QJN-bC-QY3">
+                            <rect key="frame" x="416" y="14" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="main_close_live" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="wN5-gq-OY2">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="hangupButtonClick:" target="-2" id="anl-6x-FqC"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hwx-Nn-Euk">
+                    <rect key="frame" x="185" y="253" width="254" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="250" id="egh-9c-1yk"/>
+                        <constraint firstAttribute="height" constant="22" id="ies-qM-S3L"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="cN8-Nc-4Pa">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dTm-2F-0Wl">
+                    <rect key="frame" x="185" y="224" width="254" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="YMa-9H-7Ob"/>
+                        <constraint firstAttribute="width" constant="250" id="wXw-Ls-2Kz"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="FY5-an-t1z">
+                        <font key="font" metaFont="label" size="11"/>
+                        <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tOQ-LK-D1V">
+                    <rect key="frame" x="15" y="241" width="110" height="41"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="41" id="O4C-0U-UEc"/>
+                        <constraint firstAttribute="width" constant="110" id="mhS-u7-A8T"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="main_logo_ico" id="K2q-7w-CXr"/>
+                </imageView>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="vSD-S8-Okj">
+                    <rect key="frame" x="160" y="40" width="304" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Z7r-qG-ofh"/>
+                        <constraint firstAttribute="width" constant="300" id="g82-IS-zNg"/>
+                    </constraints>
+                    <textFieldCell key="cell" selectable="YES" alignment="center" title="Multiline Label" id="cQj-6S-ndg">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="hwx-Nn-Euk" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="8Wm-Rh-NfV"/>
+                <constraint firstItem="vSD-S8-Okj" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="AfN-AJ-Ftr"/>
+                <constraint firstItem="dTm-2F-0Wl" firstAttribute="top" secondItem="hwx-Nn-Euk" secondAttribute="bottom" constant="5" id="EdO-Sy-IF7"/>
+                <constraint firstItem="tOQ-LK-D1V" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="15" id="SAV-C3-c0A"/>
+                <constraint firstItem="dTm-2F-0Wl" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="fd5-eF-g5H"/>
+                <constraint firstItem="hwx-Nn-Euk" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="22" id="ihg-XZ-U54"/>
+                <constraint firstAttribute="bottom" secondItem="vSD-S8-Okj" secondAttribute="bottom" constant="40" id="srg-c4-1mU"/>
+                <constraint firstItem="tOQ-LK-D1V" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="15" id="zzH-gk-d7v"/>
+            </constraints>
+            <point key="canvasLocation" x="211" y="166.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="main_close_live" width="38" height="38"/>
+        <image name="main_duorenlianmai_ico" width="38" height="38"/>
+        <image name="main_lianmai_button" width="38" height="38"/>
+        <image name="main_live_camera" width="38" height="38"/>
+        <image name="main_live_setting" width="38" height="38"/>
+        <image name="main_logo_ico" width="219" height="82"/>
+        <image name="main_speaker" width="38" height="38"/>
+    </resources>
+</document>
