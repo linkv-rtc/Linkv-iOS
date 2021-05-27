@@ -10,20 +10,13 @@
 #import "Masonry.h"
 #import <LinkV/LinkV.h>
 
-// liveme
-//#define PRODUCT  @"2954481451"
-//#define TEST_ENVIR  @"1069348354"
-//#define PRODUCT_SIGN    @"db38eceb97a6d4fb1215deaa69330875"
-//#define TEST_ENVIR_SIGN    @"504a48a52c2660ddef85627fe337c581"
-
-
 #define USE_TEST true
 
 // mini
-#define PRODUCT  @"5291372290"
-#define TEST_ENVIR  @"1391174876"
-#define PRODUCT_SIGN    @"f5e9cfc87f7d9c41e8b495419e315bc0"
-#define TEST_ENVIR_SIGN    @"6655bd038d611a5e6dad8114065377f7"
+#define PRODUCT  @""
+#define TEST_ENVIR  @""
+#define PRODUCT_SIGN    @""
+#define TEST_ENVIR_SIGN    @""
 
 
 #define RGBAColor(r, g, b, a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:a]

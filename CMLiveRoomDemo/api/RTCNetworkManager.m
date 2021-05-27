@@ -33,19 +33,12 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
 #else
 
 // mini online
-//#define PRODUCT  @""
-//#define PRODUCT_SIGN    @""
-//
-//// mini qa
-//#define TEST_ENVIR  @""
-//#define TEST_ENVIR_SIGN    @""
-
-#define PRODUCT  @"5291372290"
-#define PRODUCT_SIGN    @"f5e9cfc87f7d9c41e8b495419e315bc0"
+#define PRODUCT  @""
+#define PRODUCT_SIGN    @""
 
 // mini qa
-#define TEST_ENVIR  @"1391174876"
-#define TEST_ENVIR_SIGN    @"6655bd038d611a5e6dad8114065377f7"
+#define TEST_ENVIR  @""
+#define TEST_ENVIR_SIGN    @""
 
 #endif
 
@@ -147,9 +140,18 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
     }
 }
 
+
+-(NSString *)liveMeAppID{
+    return @"";
+}
+
+-(NSString *)liveMeAppSign{
+    return @"";
+}
+
 -(NSString *)mAppId{
     if (kEnableAutoTest) {
-        return @"1069348354";
+        return [self liveMeAppID];
     }
     
 //    return @"qOPBZYGqnqgCSJCobhLFRtvvJzeLLzDR";
@@ -166,7 +168,7 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
 
 -(NSString *)appServerAppID{
     if (kEnableAutoTest) {
-        return @"1069348354";
+        return [self liveMeAppID];
     }
     RTCEnvironment environment = [self environment];
     switch (environment) {
@@ -180,7 +182,7 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
 
 -(NSString *)mAppSign{
     if (kEnableAutoTest) {
-        return @"504a48a52c2660ddef85627fe337c581";
+        return [self liveMeAppSign];
     }
     RTCEnvironment environment = [self environment];
     switch (environment) {

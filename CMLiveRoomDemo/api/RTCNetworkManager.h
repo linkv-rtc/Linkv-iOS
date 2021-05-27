@@ -98,6 +98,7 @@ typedef enum : NSUInteger {
 @property (nonatomic,strong)NSString *manualEdgeURL;
 @property (nonatomic,strong)NSString *centerIP;
 
+-(NSString *)liveMeAppID;
 
 -(void)fixEnvironment:(RTCEnvironment)environment;
 

@@ -87,7 +87,7 @@
 }
 
 -(void)refreshLiveMe{
-    [[RTCNetworkManager sharedManager] POST:@{@"timestamp":[NSString stringWithFormat:@"%lld",(long long)NSDate.date.timeIntervalSince1970], @"appid":@"1069348354",@"page":@"1",@"size":@"100",@"sesssssskip":@"1",@"sign":@"sign"} api:@"https://rtc-stream-global-center.linkv.fun/admin/v1/vids" completion:^(NSDictionary * _Nullable result, RTCErrorCode httpCode) {
+    [[RTCNetworkManager sharedManager] POST:@{@"timestamp":[NSString stringWithFormat:@"%lld",(long long)NSDate.date.timeIntervalSince1970], @"appid":[[RTCNetworkManager sharedManager] liveMeAppID],@"page":@"1",@"size":@"100",@"sesssssskip":@"1",@"sign":@"sign"} api:@"https://rtc-stream-global-center.linkv.fun/admin/v1/vids" completion:^(NSDictionary * _Nullable result, RTCErrorCode httpCode) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray *dummy = result[@"data"][@"vids"];
             if ([dummy isKindOfClass:NSArray.class] && dummy.count > 0) {
