@@ -150,6 +150,7 @@
 		94D0FA6C26B8001800E21E45 /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6B26B8000B00E21E45 /* libc++.1.tbd */; };
 		94D0FA6E26B8002400E21E45 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6D26B8002400E21E45 /* Accelerate.framework */; };
 		94D0FA7026B8002900E21E45 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6F26B8002900E21E45 /* CoreML.framework */; };
+		94EEF19826B928A00006AB83 /* CMButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EEF19726B928A00006AB83 /* CMButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -472,6 +473,8 @@
 		94D0FA6D26B8002400E21E45 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		94D0FA6F26B8002900E21E45 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 		94EEF19426B8EC4F0006AB83 /* authpack-ios-xx_2021-08-3-10-26.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "authpack-ios-xx_2021-08-3-10-26.h"; sourceTree = "<group>"; };
+		94EEF19626B928A00006AB83 /* CMButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMButton.h; sourceTree = "<group>"; };
+		94EEF19726B928A00006AB83 /* CMButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CMButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -890,6 +893,8 @@
 				170478BE2424729400D846AD /* CMSettingViewController.m */,
 				170478D724249A0200D846AD /* CMSettingCell.h */,
 				170478D824249A0200D846AD /* CMSettingCell.m */,
+				94EEF19626B928A00006AB83 /* CMButton.h */,
+				94EEF19726B928A00006AB83 /* CMButton.m */,
 				170478D924249A0200D846AD /* CMSettingCell.xib */,
 				1769D544241A23C400FA4194 /* CMDemoAudioDecoder.h */,
 				1769D545241A23C400FA4194 /* CMDemoAudioDecoder.m */,
@@ -1294,6 +1299,7 @@
 				178001CA242DCD2600FAC05A /* CMStatisticsView.m in Sources */,
 				178001A7242CAD2100FAC05A /* CMBundle.m in Sources */,
 				17800199242CAD2100FAC05A /* CMMultiPersonView.m in Sources */,
+				94EEF19826B928A00006AB83 /* CMButton.m in Sources */,
 				17257D06248E371B001F54D4 /* GCDWebDAVServer.m in Sources */,
 				1780019A242CAD2100FAC05A /* CMBeautyControlView.m in Sources */,
 				17800193242CAD0400FAC05A /* UIColor+Ext.m in Sources */,

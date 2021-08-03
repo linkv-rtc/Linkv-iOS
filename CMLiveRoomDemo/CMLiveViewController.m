@@ -25,6 +25,7 @@
 #import "LVRTCFileCapturer.h"
 #import <AVFoundation/AVFoundation.h>
 #import <libCNamaSDK/FURenderer.h>
+#import "CMButton.h"
 
 //#define kCMUseFileCapturer          true
 
@@ -1338,12 +1339,13 @@ static LVRTCCameraPosition _cameraPosition = LVRTCCameraPositionFront;
     if (!displayView) {
         displayView = [[LVRTCDisplayView alloc]initWithFrame:CGRectMake(0, 0, 122, 218)];
         displayView.uid = userId;
-        displayView.tag = self.renders.allValues.count + 1000;
+        displayView.tag = self.renders.allValues.count + 100000000;
         displayView.viewContentMode = LVViewContentModeScaleAspectFit;
         [self.view addSubview:displayView];
         [[LVRTCEngine sharedInstance] addDisplayView:displayView];
         
-        UIButton *close = [UIButton buttonWithType:UIButtonTypeCustom];
+        CMButton *close = [CMButton buttonWithType:UIButtonTypeCustom];
+        close.uid = userId;
         [close addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         close.tag = displayView.tag;
         [close setImage:[UIImage imageNamed:@"close_ico"] forState:UIControlStateNormal];
@@ -1401,8 +1403,8 @@ static LVRTCCameraPosition _cameraPosition = LVRTCCameraPositionFront;
 }
 
 -(void)closeButtonClick:(UIButton *)button{
-    LVRTCDisplayView *displayView = [self.view viewWithTag:button.tag];
-    NSString *uid = displayView.uid;
+    CMButton *btn = (CMButton *)button;
+    NSString *uid = btn.uid;
     if ([uid isEqualToString:[RTCNetworkManager sharedManager].userId] || !uid) {
         [self.cmApi stopPublishing];
         [self.cmApi stopCapture];
