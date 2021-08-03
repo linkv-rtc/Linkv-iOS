@@ -1,8 +1,8 @@
 //
-//  CMRTCEngine.h
-//  CMRTCEngine
+//  LVRTCEngineDefines.h
+//  LVRTCEngineDefines
 //
-//  Copyright © 2019年 LiveMe. All rights reserved.
+//  Copyright © 2021年 LinkV. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
@@ -223,7 +223,11 @@ typedef NS_ENUM(NSInteger, LVRTCVideoProfile) {
     /**
         1280x720  15   1800
      */
-    LVRTCVideoProfile_720P = 5
+    LVRTCVideoProfile_720P = 5,
+    /**
+        1920x1080  15   2400， 手机端暂不支持 1080P 视频走 RTC，请不要支持使用
+     */
+    LVRTCVideoProfile_1080P = 6
 };
 
 /**
@@ -235,13 +239,25 @@ typedef enum : NSUInteger {
      */
     LVImageOrientationNone = 0,
     /**
+        画面旋转 90 度
+     */
+    LVImageOrientationRotate90,
+    /**
         向左旋转
      */
-    LVImageOrientationRotateLeft,
+    LVImageOrientationRotateLeft = LVImageOrientationRotate90,
+    /**
+        旋转 180 度
+     */
+    LVImageOrientationRotate180,
+    /**
+        画面选择 270 度
+     */
+    LVImageOrientationRotate270,
     /**
         向右旋转
      */
-    LVImageOrientationRotateRight,
+    LVImageOrientationRotateRight = LVImageOrientationRotate270,
     /**
         竖直翻转
      */
@@ -251,22 +267,13 @@ typedef enum : NSUInteger {
      */
     LVImageOrientationFlipHorizonal,
     /**
-        向右旋转并同时竖直翻转
+        向左旋转并同时水平翻转
      */
-    LVImageOrientationRightFlipVertical,
+    LVImageOrientationRotateLeftHorizonal,
     /**
         向右旋转并同时水平翻转
      */
-    LVImageOrientationRightFlipHorizontal,
-    
-    LVImageOrientationRotateLeftHorizonal,
     LVImageOrientationRotateRightHorizonal,
-    
-    /**
-        旋转 180 度
-     */
-    LVImageOrientationRotate180,
-    
     /**
         由程序内部控制旋转方向
      */
@@ -289,6 +296,24 @@ typedef enum : NSUInteger {
     LVAudio3AModeSoftware,
 } LVAudio3AMode;
 
+
+/**
+ 外置视频数据类型
+ */
+typedef enum : NSUInteger {
+    /**
+        摄像头视频内容
+     */
+    LVSampleBufferType_Camera,
+    /**
+        文件视频内容
+     */
+    LVSampleBufferType_VideoFile,
+    /**
+        屏幕共享视频内容
+     */
+    LVSampleBufferType_ScreenShare,
+} LVSampleBufferType;
 
 /**
  视频网络自适应j降级策略
@@ -342,6 +367,45 @@ typedef enum : NSUInteger {
 
 } LVAudioMixingMode;
 
+/**
+ 音视频录制支持模式
+ */
+typedef enum : NSUInteger {
+    /**
+        仅录制音频
+     */
+    LVRecorderType_AUDIO = 0,
+    /**
+        仅录制视频
+     */
+    LVRecorderType_VIDEO,
+    /**
+        音频和视频同时录制
+     */
+    LVRecorderType_AUDIO_AND_VIDEO,
+    
+} LVRecorderType;
+
+
+
+typedef enum : NSUInteger {
+    
+    /**
+        使用默认音频编码器
+     */
+    LVAudioEncoderMode_DEFAULT = 0,
+    
+    /**
+        音频编码器使用 VOIP 模式编码，通话和视频会议场景建议使用
+     */
+    LVAudioEncoderMode_VOIP,
+    
+    /**
+        音频编码器使用 MUSIC 模式编码，音乐场景适用
+     */
+    LVAudioEncoderMode_MUSIC,
+} LVAudioEncoderMode;
+
 
 /// SDK 通用回到 block，code 表示当前操作的结果码
 typedef void (^LVServiceCompletion)(LVErrorCode code);
@@ -387,6 +451,12 @@ LV_EXPORT_CLASS
 
 /// 视频最小码率 ，单位 bps
 @property (assign) int min_bitrate;
+
+/// 音频码率，单位 bps， 默认为 56kbps，音乐场景建议设置为 128 kbps / 256kbps
+@property (assign) int audio_bitrate;
+
+/// 音频编码器编码模式
+@property (assign) LVAudioEncoderMode mode;
 
 /// 视频降级策略，默认为维持分辨率大小不变（MAINTAIN_RESOLUTION）
 @property (assign) LVVideoDegradationPreference videoDegradationPreference;
@@ -596,7 +666,7 @@ LV_EXPORT_CLASS
 
 @end
 
-
+/// 基础美颜功能实现
 @interface LVBeautyManager : NSObject
 
 /// 设置滤镜美颜级别

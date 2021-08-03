@@ -33,7 +33,6 @@
 #import "GCDWebDAVServer.h"
 #import "UWConfig.h"
 
-
 #define RGBAColor(r, g, b, a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:a]
 
 const int64_t kInternalNanosecondsPerSecond = 1000000000;
@@ -45,8 +44,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 };
 
 
-@interface CMMainViewController ()<UIViewControllerTransitioningDelegate>
-{
+@interface CMMainViewController ()<UIViewControllerTransitioningDelegate>{
     GCDWebServer *_davServer;
 }
 @property (nonatomic,strong)UIButton *loginButton;
@@ -116,6 +114,8 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     
     UITapGestureRecognizer *hideKeyboard = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyboardClick)];
     [self.view addGestureRecognizer:hideKeyboard];
+    
+    [[RTCNetworkManager sharedManager] clearAllRoom];
     
 }
 

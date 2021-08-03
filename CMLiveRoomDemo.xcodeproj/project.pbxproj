@@ -131,6 +131,25 @@
 		17FD9FB4247D1F2D008A7044 /* CMParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17FD9FB3247D1F2D008A7044 /* CMParameterView.xib */; };
 		9495BA402623ED8100C57D98 /* LinkV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17AD21C9243DBE1D000D3E6D /* LinkV.framework */; };
 		9495BA412623ED8100C57D98 /* LinkV.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17AD21C9243DBE1D000D3E6D /* LinkV.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		94D0FA5926B7E11A00E21E45 /* ai_human_processor_mb_fast.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4926B7E11A00E21E45 /* ai_human_processor_mb_fast.bundle */; };
+		94D0FA5A26B7E11A00E21E45 /* ai_hand_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4A26B7E11A00E21E45 /* ai_hand_processor.bundle */; };
+		94D0FA5B26B7E11A00E21E45 /* ai_face_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4B26B7E11A00E21E45 /* ai_face_processor.bundle */; };
+		94D0FA5C26B7E11A00E21E45 /* ai_bgseg_green.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4C26B7E11A00E21E45 /* ai_bgseg_green.bundle */; };
+		94D0FA5D26B7E11A00E21E45 /* ai_face_processor_lite.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4D26B7E11A00E21E45 /* ai_face_processor_lite.bundle */; };
+		94D0FA5E26B7E11A00E21E45 /* ai_hairseg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4E26B7E11A00E21E45 /* ai_hairseg.bundle */; };
+		94D0FA5F26B7E11A00E21E45 /* ai_human_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA4F26B7E11A00E21E45 /* ai_human_processor.bundle */; };
+		94D0FA6026B7E11A00E21E45 /* tongue.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5126B7E11A00E21E45 /* tongue.bundle */; };
+		94D0FA6126B7E11A00E21E45 /* fxaa.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5226B7E11A00E21E45 /* fxaa.bundle */; };
+		94D0FA6226B7E11A00E21E45 /* face_makeup.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5326B7E11A00E21E45 /* face_makeup.bundle */; };
+		94D0FA6326B7E11A00E21E45 /* controller_cpp.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5426B7E11A00E21E45 /* controller_cpp.bundle */; };
+		94D0FA6426B7E11A00E21E45 /* body_slim.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5526B7E11A00E21E45 /* body_slim.bundle */; };
+		94D0FA6526B7E11A00E21E45 /* fuzzytoonfilter.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5626B7E11A00E21E45 /* fuzzytoonfilter.bundle */; };
+		94D0FA6626B7E11A00E21E45 /* face_beautification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94D0FA5726B7E11A00E21E45 /* face_beautification.bundle */; };
+		94D0FA6826B7E9FD00E21E45 /* libCNamaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA4626B7E11A00E21E45 /* libCNamaSDK.framework */; };
+		94D0FA6926B7E9FD00E21E45 /* libCNamaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA4626B7E11A00E21E45 /* libCNamaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		94D0FA6C26B8001800E21E45 /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6B26B8000B00E21E45 /* libc++.1.tbd */; };
+		94D0FA6E26B8002400E21E45 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6D26B8002400E21E45 /* Accelerate.framework */; };
+		94D0FA7026B8002900E21E45 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D0FA6F26B8002900E21E45 /* CoreML.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +201,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				94D0FA6926B7E9FD00E21E45 /* libCNamaSDK.framework in Embed Frameworks */,
 				9495BA412623ED8100C57D98 /* LinkV.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -433,6 +453,25 @@
 		27D6571B23D81B640084BC6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		27D6571D23D81B660084BC6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27D6572023D81B660084BC6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		94D0FA4626B7E11A00E21E45 /* libCNamaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libCNamaSDK.framework; sourceTree = "<group>"; };
+		94D0FA4926B7E11A00E21E45 /* ai_human_processor_mb_fast.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_human_processor_mb_fast.bundle; sourceTree = "<group>"; };
+		94D0FA4A26B7E11A00E21E45 /* ai_hand_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_hand_processor.bundle; sourceTree = "<group>"; };
+		94D0FA4B26B7E11A00E21E45 /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_face_processor.bundle; sourceTree = "<group>"; };
+		94D0FA4C26B7E11A00E21E45 /* ai_bgseg_green.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_bgseg_green.bundle; sourceTree = "<group>"; };
+		94D0FA4D26B7E11A00E21E45 /* ai_face_processor_lite.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_face_processor_lite.bundle; sourceTree = "<group>"; };
+		94D0FA4E26B7E11A00E21E45 /* ai_hairseg.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_hairseg.bundle; sourceTree = "<group>"; };
+		94D0FA4F26B7E11A00E21E45 /* ai_human_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_human_processor.bundle; sourceTree = "<group>"; };
+		94D0FA5126B7E11A00E21E45 /* tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = tongue.bundle; sourceTree = "<group>"; };
+		94D0FA5226B7E11A00E21E45 /* fxaa.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fxaa.bundle; sourceTree = "<group>"; };
+		94D0FA5326B7E11A00E21E45 /* face_makeup.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = face_makeup.bundle; sourceTree = "<group>"; };
+		94D0FA5426B7E11A00E21E45 /* controller_cpp.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller_cpp.bundle; sourceTree = "<group>"; };
+		94D0FA5526B7E11A00E21E45 /* body_slim.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = body_slim.bundle; sourceTree = "<group>"; };
+		94D0FA5626B7E11A00E21E45 /* fuzzytoonfilter.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fuzzytoonfilter.bundle; sourceTree = "<group>"; };
+		94D0FA5726B7E11A00E21E45 /* face_beautification.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = face_beautification.bundle; sourceTree = "<group>"; };
+		94D0FA6B26B8000B00E21E45 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		94D0FA6D26B8002400E21E45 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		94D0FA6F26B8002900E21E45 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
+		94EEF19426B8EC4F0006AB83 /* authpack-ios-xx_2021-08-3-10-26.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "authpack-ios-xx_2021-08-3-10-26.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -471,10 +510,14 @@
 				1779ABD825303A9100431A57 /* MetalPerformanceShaders.framework in Frameworks */,
 				1779ABD625303A8900431A57 /* MetalKit.framework in Frameworks */,
 				17257D0C248E37A4001F54D4 /* libxml2.tbd in Frameworks */,
+				94D0FA6C26B8001800E21E45 /* libc++.1.tbd in Frameworks */,
 				1779ABD425303A8300431A57 /* Metal.framework in Frameworks */,
 				9495BA402623ED8100C57D98 /* LinkV.framework in Frameworks */,
+				94D0FA6826B7E9FD00E21E45 /* libCNamaSDK.framework in Frameworks */,
 				171F647A2444771B00190535 /* Bugly.framework in Frameworks */,
+				94D0FA6E26B8002400E21E45 /* Accelerate.framework in Frameworks */,
 				17800190242CACFC00FAC05A /* libMasonry.a in Frameworks */,
+				94D0FA7026B8002900E21E45 /* CoreML.framework in Frameworks */,
 				17257D07248E371B001F54D4 /* libGCDWebServer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -744,6 +787,9 @@
 		17A7BDD8240CFCDD00839E6C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94D0FA6F26B8002900E21E45 /* CoreML.framework */,
+				94D0FA6D26B8002400E21E45 /* Accelerate.framework */,
+				94D0FA6B26B8000B00E21E45 /* libc++.1.tbd */,
 				1779ABD725303A9100431A57 /* MetalPerformanceShaders.framework */,
 				1779ABD525303A8900431A57 /* MetalKit.framework */,
 				1779ABC425303A8300431A57 /* Metal.framework */,
@@ -772,6 +818,7 @@
 		27D6570523D81B640084BC6A = {
 			isa = PBXGroup;
 			children = (
+				94D0FA4526B7E11A00E21E45 /* FaceUnity-SDK-iOS-v7.4.1 */,
 				27D6571023D81B640084BC6A /* CMLiveRoomDemo */,
 				17800155242CABF400FAC05A /* LinkV */,
 				17800171242CABF700FAC05A /* LinkVTests */,
@@ -866,6 +913,53 @@
 				178001CD242DD3F500FAC05A /* CMListTableViewCell.xib */,
 			);
 			path = CMLiveRoomDemo;
+			sourceTree = "<group>";
+		};
+		94D0FA4526B7E11A00E21E45 /* FaceUnity-SDK-iOS-v7.4.1 */ = {
+			isa = PBXGroup;
+			children = (
+				94EEF19426B8EC4F0006AB83 /* authpack-ios-xx_2021-08-3-10-26.h */,
+				94D0FA4626B7E11A00E21E45 /* libCNamaSDK.framework */,
+				94D0FA4726B7E11A00E21E45 /* Resources */,
+			);
+			path = "FaceUnity-SDK-iOS-v7.4.1";
+			sourceTree = "<group>";
+		};
+		94D0FA4726B7E11A00E21E45 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				94D0FA4826B7E11A00E21E45 /* model */,
+				94D0FA5026B7E11A00E21E45 /* graphics */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		94D0FA4826B7E11A00E21E45 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				94D0FA4926B7E11A00E21E45 /* ai_human_processor_mb_fast.bundle */,
+				94D0FA4A26B7E11A00E21E45 /* ai_hand_processor.bundle */,
+				94D0FA4B26B7E11A00E21E45 /* ai_face_processor.bundle */,
+				94D0FA4C26B7E11A00E21E45 /* ai_bgseg_green.bundle */,
+				94D0FA4D26B7E11A00E21E45 /* ai_face_processor_lite.bundle */,
+				94D0FA4E26B7E11A00E21E45 /* ai_hairseg.bundle */,
+				94D0FA4F26B7E11A00E21E45 /* ai_human_processor.bundle */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		94D0FA5026B7E11A00E21E45 /* graphics */ = {
+			isa = PBXGroup;
+			children = (
+				94D0FA5126B7E11A00E21E45 /* tongue.bundle */,
+				94D0FA5226B7E11A00E21E45 /* fxaa.bundle */,
+				94D0FA5326B7E11A00E21E45 /* face_makeup.bundle */,
+				94D0FA5426B7E11A00E21E45 /* controller_cpp.bundle */,
+				94D0FA5526B7E11A00E21E45 /* body_slim.bundle */,
+				94D0FA5626B7E11A00E21E45 /* fuzzytoonfilter.bundle */,
+				94D0FA5726B7E11A00E21E45 /* face_beautification.bundle */,
+			);
+			path = graphics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1090,18 +1184,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				17FD9FB4247D1F2D008A7044 /* CMParameterView.xib in Resources */,
+				94D0FA5E26B7E11A00E21E45 /* ai_hairseg.bundle in Resources */,
+				94D0FA6426B7E11A00E21E45 /* body_slim.bundle in Resources */,
+				94D0FA6126B7E11A00E21E45 /* fxaa.bundle in Resources */,
 				178001AD242CAD3100FAC05A /* CMLiveSettingCell.xib in Resources */,
 				178001CB242DD3F500FAC05A /* CMListTableViewCell.xib in Resources */,
+				94D0FA6226B7E11A00E21E45 /* face_makeup.bundle in Resources */,
 				178001AC242CAD2D00FAC05A /* CMSettingSliderCell.xib in Resources */,
 				1780018F242CACEF00FAC05A /* Localizable.strings in Resources */,
+				94D0FA6626B7E11A00E21E45 /* face_beautification.bundle in Resources */,
+				94D0FA5A26B7E11A00E21E45 /* ai_hand_processor.bundle in Resources */,
+				94D0FA6026B7E11A00E21E45 /* tongue.bundle in Resources */,
+				94D0FA5C26B7E11A00E21E45 /* ai_bgseg_green.bundle in Resources */,
+				94D0FA5926B7E11A00E21E45 /* ai_human_processor_mb_fast.bundle in Resources */,
 				178001AF242CAD3900FAC05A /* CMEasyDemoViewController.xib in Resources */,
 				178001A3242CAD2100FAC05A /* audio.mp3 in Resources */,
 				1780018C242CACDF00FAC05A /* Main.storyboard in Resources */,
+				94D0FA5D26B7E11A00E21E45 /* ai_face_processor_lite.bundle in Resources */,
+				94D0FA6526B7E11A00E21E45 /* fuzzytoonfilter.bundle in Resources */,
 				17DA286F24347BC400A677C3 /* CMStatisticsHeaderCell.xib in Resources */,
 				178001AE242CAD3400FAC05A /* CMSettingCell.xib in Resources */,
 				1780018D242CACEA00FAC05A /* InfoPlist.strings in Resources */,
 				171E0DA7242DD6B800E54AE0 /* CMStatisticsViewCell.xib in Resources */,
 				178001AB242CAD2A00FAC05A /* CMVolumeControlView.xib in Resources */,
+				94D0FA5B26B7E11A00E21E45 /* ai_face_processor.bundle in Resources */,
+				94D0FA6326B7E11A00E21E45 /* controller_cpp.bundle in Resources */,
+				94D0FA5F26B7E11A00E21E45 /* ai_human_processor.bundle in Resources */,
 				1780018A242CACC300FAC05A /* Assets.xcassets in Resources */,
 				1780018B242CACD900FAC05A /* LaunchScreen.storyboard in Resources */,
 				178001AA242CAD2700FAC05A /* CMBeautyControlView.xib in Resources */,
@@ -1575,6 +1683,7 @@
 					"$(PROJECT_DIR)/CMLiveRoomDemo/Frameworks",
 					"$(PROJECT_DIR)/LinkV",
 					"$(PROJECT_DIR)/CMLiveRoomDemo",
+					"$(PROJECT_DIR)/FaceUnity-SDK-iOS-v7.4.1",
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = LinkV/Info.plist;
@@ -1589,7 +1698,7 @@
 					"$(PROJECT_DIR)/CMLiveRoomDemo/third/webserver",
 				);
 				MARKETING_VERSION = 1.0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.linkv.apple.rtc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hongdou.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
@@ -1610,6 +1719,7 @@
 					"$(PROJECT_DIR)/CMLiveRoomDemo/Frameworks",
 					"$(PROJECT_DIR)/LinkV",
 					"$(PROJECT_DIR)/CMLiveRoomDemo",
+					"$(PROJECT_DIR)/FaceUnity-SDK-iOS-v7.4.1",
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = LinkV/Info.plist;
@@ -1624,7 +1734,7 @@
 					"$(PROJECT_DIR)/CMLiveRoomDemo/third/webserver",
 				);
 				MARKETING_VERSION = 1.0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.linkv.apple.rtc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hongdou.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e armv7 armv7s";

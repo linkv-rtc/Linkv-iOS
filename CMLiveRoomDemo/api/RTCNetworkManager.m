@@ -8,6 +8,8 @@
 
 #import "RTCNetworkManager.h"
 #import <LinkV/LinkV.h>
+#import <libCNamaSDK/FURenderer.h>
+#import "authpack-ios-xx_2021-08-3-10-26.h"
 
 //static NSString *const kTestApi = @"http://192.168.50.65:8080";
 //static NSString *const kProductionApi = @"http://192.168.50.65:8080";
@@ -47,6 +49,7 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
 @interface RTCNetworkManager ()
 {
     NSUInteger _transaction;
+    int _items[3];
 }
 @property (nonatomic,assign,readonly)NSUInteger transaction;
 @property (nonatomic,strong)NSURLSession *session;
@@ -64,6 +67,15 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
     return _manager;
 }
 
+-(int *)items{
+    return _items;
+}
+
+- (void)loadFilter{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"face_beautification" ofType:@"bundle"];
+    _items[1] = [FURenderer itemWithContentsOfFile:path];
+}
+
 -(NSUInteger)transaction{
     _transaction = _transaction + 1;
     return _transaction;
@@ -71,11 +83,14 @@ static NSString *const kProductionApi = @"http://rtc-backend-orion.ksmobile.net"
 
 
 -(void)configure{
+    int code = [[FURenderer shareRenderer] setupWithData:nil dataSize:0 ardata:nil authPackage:g_auth_package authSize:sizeof(g_auth_package)  shouldCreateContext:YES];
     _transaction = 100000;
     _environment = RTCEnvironmentProduction;
+    memset(_items, 0, sizeof(int) * 3);
     _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     uint64_t time = [NSDate date].timeIntervalSince1970 * 1000 * 1000 * 1000;
     _suffix = [[NSString stringWithFormat:@"%lld%d",time,arc4random()%100000] substringFromIndex:2];
+    [self loadFilter];
 }
 
 -(NSString *)roomSuffix{

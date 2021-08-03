@@ -24,6 +24,7 @@
 #import "CMStatisticsView.h"
 #import "LVRTCFileCapturer.h"
 #import <AVFoundation/AVFoundation.h>
+#import <libCNamaSDK/FURenderer.h>
 
 //#define kCMUseFileCapturer          true
 
@@ -54,7 +55,7 @@ typedef enum : NSUInteger {
 
 static LVRTCCameraPosition _cameraPosition = LVRTCCameraPositionFront;
 
-@interface CMLiveViewController ()<LVRTCEngineDelegate,CMLiveSettingViewDelegate,CMDemoAudioDecoderDelegate,CMLiveUserListViewDelegate,CMBeautyControlViewDelegate,LVRTCFileCapturerDelegate,RTCNetworkManagerDelegate>
+@interface CMLiveViewController ()<LVRTCEngineDelegate,CMLiveSettingViewDelegate,CMDemoAudioDecoderDelegate,CMLiveUserListViewDelegate,CMBeautyControlViewDelegate,LVRTCFileCapturerDelegate,RTCNetworkManagerDelegate, LVVideoFrameCaptureCallback>
 {
     RTCRoomStatus _roomStatus;
     BOOL joinedRoom;
@@ -155,6 +156,10 @@ static LVRTCCameraPosition _cameraPosition = LVRTCCameraPositionFront;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [FURenderer itemSetParam:[RTCNetworkManager sharedManager].items[1] withName:@"is_makeup_on" value:@(1)];
+    [[LVRTCEngine sharedInstance] setVideoFrameCaptureCallback:self];
+    fuSetLogLevel(FU_LOG_LEVEL_INFO);
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor lightGrayColor];
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -1594,38 +1599,63 @@ static LVRTCCameraPosition _cameraPosition = LVRTCCameraPositionFront;
     [self.locker unlock];
 }
 
--(void)OnCaptureVideoFrame:(CVPixelBufferRef)pixelBuffer{
-    if (!self.startRecordVideo || recorderRemoteVideo == YES) {
-        return;
+-(CMSampleBufferRef)OnCaptureVideoFrame:(CMSampleBufferRef)sampleBuffer{
+    static int frameID = 0;
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CMTime currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    CMTime decodeTime = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
+    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
+    CVPixelBufferRef outputFrame = [[FURenderer shareRenderer] renderPixelBuffer:pixelBuffer withFrameId:frameID++ items:[RTCNetworkManager sharedManager].items itemCount:3 flipx:YES];
+    if (!outputFrame) {
+        return nil;
     }
-    CFRetain(pixelBuffer);
-    dispatch_async(_videoQueue, ^{
-//        NSData *bytes = [LVRTCEngine.sharedInstance convert:pixelBuffer];
-        NSData *bytes;
-        CFRelease(pixelBuffer);
-        if (VideoStart == 0) {
-            VideoStart = [NSDate date].timeIntervalSince1970 * 1000;
-        }
-        if (!_videoFileHandle) {
-            NSString *videoPath = [NSString stringWithFormat:@"%@/Documents/local_video.yuv",NSHomeDirectory()];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:videoPath]) {
-                [[NSFileManager defaultManager] removeItemAtPath:videoPath error:nil];
-            }
-            [[NSFileManager defaultManager] createFileAtPath:videoPath contents:nil attributes:nil];
-            _videoFileHandle = [NSFileHandle fileHandleForWritingAtPath:videoPath];
-        }
-        long long now = [NSDate date].timeIntervalSince1970 * 1000;
-        if ((now - VideoStart) < 10 * 1000 && self.startRecordVideo) {
-            [_videoFileHandle writeData:bytes];
-        }
-        else{
-            [_videoFileHandle closeFile];
-            self.startRecordVideo = NO;
-            VideoStart = 0;
-            _videoFileHandle = nil;
-        }
-    });
+    
+    CVPixelBufferLockBaseAddress(outputFrame, 0);
+    CMVideoFormatDescriptionRef videoInfo = NULL;
+    CMVideoFormatDescriptionCreateForImageBuffer(NULL, outputFrame, &videoInfo);
+    if (videoInfo) {
+        CMSampleTimingInfo timing = {duration, currentTime, decodeTime};
+        CMSampleBufferRef processedSampleBuffer = NULL;
+        CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, outputFrame, YES, NULL, NULL, videoInfo, &timing, &processedSampleBuffer);
+        CFRelease(videoInfo);
+        return processedSampleBuffer;
+    }
+    CVPixelBufferUnlockBaseAddress(outputFrame, 0);
+    return nil;
 }
+
+//-(void)OnCaptureVideoFrame:(CVPixelBufferRef)pixelBuffer{
+//    if (!self.startRecordVideo || recorderRemoteVideo == YES) {
+//        return;
+//    }
+//    CFRetain(pixelBuffer);
+//    dispatch_async(_videoQueue, ^{
+////        NSData *bytes = [LVRTCEngine.sharedInstance convert:pixelBuffer];
+//        NSData *bytes;
+//        CFRelease(pixelBuffer);
+//        if (VideoStart == 0) {
+//            VideoStart = [NSDate date].timeIntervalSince1970 * 1000;
+//        }
+//        if (!_videoFileHandle) {
+//            NSString *videoPath = [NSString stringWithFormat:@"%@/Documents/local_video.yuv",NSHomeDirectory()];
+//            if ([[NSFileManager defaultManager] fileExistsAtPath:videoPath]) {
+//                [[NSFileManager defaultManager] removeItemAtPath:videoPath error:nil];
+//            }
+//            [[NSFileManager defaultManager] createFileAtPath:videoPath contents:nil attributes:nil];
+//            _videoFileHandle = [NSFileHandle fileHandleForWritingAtPath:videoPath];
+//        }
+//        long long now = [NSDate date].timeIntervalSince1970 * 1000;
+//        if ((now - VideoStart) < 10 * 1000 && self.startRecordVideo) {
+//            [_videoFileHandle writeData:bytes];
+//        }
+//        else{
+//            [_videoFileHandle closeFile];
+//            self.startRecordVideo = NO;
+//            VideoStart = 0;
+//            _videoFileHandle = nil;
+//        }
+//    });
+//}
 
 - (void)didOutputSampleBuffer:(CMSampleBufferRef _Nullable)sampleBuffer{
     [[LVRTCEngine sharedInstance] sendVideoFrame:sampleBuffer];

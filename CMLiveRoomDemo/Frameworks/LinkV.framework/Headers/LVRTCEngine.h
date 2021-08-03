@@ -2,7 +2,7 @@
 //  LVRTCEngine.h
 //  LVRTCEngine
 //
-//  Copyright © 2019年 LiveMe. All rights reserved.
+//  Copyright © 2021年 LinkV. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import "LVRTCEngineDefines.h"
@@ -121,6 +121,18 @@ LV_EXPORT_CLASS
 /// 混音播放器当前音频播放结束
 - (void)AudioMixerPlayerDidFinished;
 
+
+/// 收到视频首帧回调通知事件
+/// @param userId 视频发送者用户 ID
+/// @param streamId 流 ID，默认为空字符串，如果使用自定义视频流时为自定义视频流对应的流名称
+- (void)OnReceivedFirstVideoFrame:(NSString *)userId streamId:(NSString *)streamId;
+
+
+/// 收到音频首帧回调通知事件
+/// @param userId 音视频发送者用户 ID
+/// @param streamId 流 ID，默认为空字符串，如果使用自定义视频流时为自定义视频流对应的流名称
+- (void)OnReceivedFirstAudioFrame:(NSString *)userId streamId:(NSString *)streamId;
+
 @end
 
 
@@ -181,24 +193,18 @@ LV_EXPORT_CLASS
 
 /// 是否使用测试环境
 /// @param env YES 为使用测试环境，NO 为不使用测试环境（默认为 NO）
-+ (void)setUseTestEnv:(BOOL)env;
-
-
-/// 是否使用国际版本（SDK 默认使用中国版本，国内用户请不要调用）
-/// @param env YES 为国际版本，NO 为国内版本
-+ (void)setUseInternationalEnv:(BOOL)env;
-
++ (void)setUseTestEnv:(bool)env;
 
 /// 设置调试的 signal  IP 地址
 /// @param ip signal IP 地址
 + (void)setDebugServerIp:(NSString *)ip;
 
 /// 设置接收到视频数据时解码的像素格式类型
-/// @param osType 像素格式类型（CVPixelFormatType）
+/// @param osType 像素格式类型（CVPixelFormatType），VideoToolBox 解码器支持的颜色像素类型
 + (bool)setDecoderPixelType:(OSType)osType;
 
 /// 设置视频数据编码的像素格式类型
-/// @param osType 像素格式类型（CVPixelFormatType）
+/// @param osType 像素格式类型（CVPixelFormatType），VideoToolBox 编码器支持的颜色像素类型
 + (bool)setEncoderPixelType:(OSType)osType;
 
 /// 返回 LVRTCEngine 实例对象
@@ -273,12 +279,12 @@ LV_EXPORT_CLASS
 
 /// 房间之间 PK（跨房间连麦功能）
 /// @param roomId 房间 ID
-/// @param pk 对象 userId
+/// @param linkUserId PK 对象的 userId
 - (void)linkRoom:(NSString *)roomId linkUserId:(NSString *)linkUserId;
 
 /// 取消跨房间连麦功能
 /// @param roomId 房间 ID
-/// @param unlinkUserId 取消 pk 对象 userId
+/// @param unlinkUserId 取消 pk 对象的 userId
 - (void)unlinkRoom:(NSString *)roomId unlinkUserId:(NSString *)unlinkUserId;
 
 
@@ -307,7 +313,7 @@ LV_EXPORT_CLASS
 /// @discussion 推流时可调用本 API 进行参数配置
 - (bool)enableMic:(bool)enbale;
 
-/// 扬声器和听筒切换功能
+/// 扬声器和听筒切换功能，需要在通话场景下设置才能生效
 /// @param enable true 视同扬声器播放音频，false 使用听筒播放音频。（默认 true）
 /// @return true 成功，false 失败
 - (bool)enableSpeakerphone:(bool)enable;
@@ -318,7 +324,7 @@ LV_EXPORT_CLASS
 
 /// 开启音量变化监听，并设置音量变化监听回调频率，成功后回调 OnAudioVolumeUpdate:
 /// @param timeInMS 单位毫秒（默认回调频率为 100 ms 回调一次）
-- (void)startSoundLevelMonitor:(unsigned int)timeInMS;
+- (void)startSoundLevelMonitor:(int)timeInMS;
 
 /// 停止音量变化的监听
 - (void)stopSoundLevelMonitor;
@@ -330,12 +336,11 @@ LV_EXPORT_CLASS
 
 /// 设置是否允许 SDK 自动根据设备的方向调整视频的输出方向
 /// @param enable 打开和关闭（默认是 YES）
--(void)enableVideoAutoRotation:(BOOL)enable;
-
+-(void)enableVideoAutoRotation:(bool)enable;
 
 /// 设置手动管理视频输出方向，该方法需要先调用 enableVideoAutoRotateAdapter，将自动旋转方法关闭才能生效
-/// @param rotation 视频输出方向，（默认是 LVVideoRotation_0）
--(void)setOutputVideoRotation:(LVVideoRotation)rotation;
+/// @param orientation 视频输出方向，（默认是 LVImageOrientationNone ）
+-(void)setOutputVideoOrientation:(LVImageOrientation)orientation;
 
 /// 开始播放音乐文件及混音（声音伴奏）
 /// @param filePath 文件路径
@@ -400,16 +405,22 @@ LV_EXPORT_CLASS
 /// @return 发送成功与否
 -(int)sendAudioFrame:(int16_t *)audioFrameBuffer length:(int)length;
 
-/// 外部采集的视频数据
-/// @param sampleBuffer 视频数据（必须是解码的视频数据）
+/// 外部采集的视频数据（可以随视频附加其他信息） 注：调用 startCapture 后该方法会被忽略，使用该方法发送视频时不会自动绘制 sampleBuffer 到本地的 LVRTCDisplayView，需要开发者自行实现视图渲染功能，或者调用 sendVideoFrame:sei:type: 使用 SDK 内部渲染
+/// @param sampleBuffer 视频数据（必须是 YUV 或者 RGBA 的视频数据）
 /// @see startCapture
 - (void)sendVideoFrame:(CMSampleBufferRef)sampleBuffer;
 
-/// 外部采集的视频数据（可以随视频附加其他信息）   注：调用 startCapture 后该方法会被忽略
-/// @param sampleBuffer 视频数据（必须是解码的视频数据）
+/// 外部采集的视频数据（可以随视频附加其他信息)   注：调用 startCapture 后该方法会被忽略，使用该方法发送视频时不会自动绘制 sampleBuffer 到本地的 LVRTCDisplayView，需要开发者自行实现视图渲染功能，或者调用 sendVideoFrame:sei:type: 使用 SDK 内部渲染
+/// @param sampleBuffer 视频数据（必须是 YUV 或者 RGBA 的视频数据）
 /// @param sei 媒体附加数据，该数据会随视频一起发送到接收端
 /// @see startCapture
 - (void)sendVideoFrame:(CMSampleBufferRef)sampleBuffer sei:(NSString*)sei;
+
+/// 外部采集的视频数据（可以随视频附加其他信息）   注：调用 startCapture 后该方法会被忽略，
+/// @param sampleBuffer 视频数据（必须是 YUV 或者 RGBA 的视频数据）
+/// @param sei 媒体附加数据，该数据会随视频一起发送到接收端
+/// @param type 媒体类型
+- (void)sendVideoFrame:(CMSampleBufferRef)sampleBuffer sei:(NSString*)sei type:(LVSampleBufferType)type;
 
 /// 控制远端音频流音量, 加入房间成功后调用
 /// @param volume 音量大小（0，100）
@@ -436,8 +447,37 @@ LV_EXPORT_CLASS
 /// @param mode 模式参数
 - (void)setAgcMode:(LVAudio3AMode)mode;
 
+/// SDK 内部录制功能，目前仅支持视频编码为 H264、音频编码为 Opus 的录制，录制格式为 mkv 文件，无论录制音频还是视频请提供 mkv 后缀文件地址, eg: /tmp/recorder/hello.mkv
+/// @param userId 用户 ID
+/// @param path 文件路径
+/// @param type 音视频录制类型
+/// @return 0 : 录制成功， 其他 : 录制失败
+- (int)startRecorder:(NSString*)userId path:(NSString *)path type:(LVRecorderType)type;
+
+
+/// 停止录制
+/// @param userId 音视频用户 ID
+/// @return 0 : 停止录制成功，其他 : 停止录制失败
+- (int)stopRecorder:(NSString*)userId;
+
+
 @end
 
+@protocol LVVideoFrameCaptureCallback <NSObject>
+
+/// SDK 内部采集数据回调
+/// @param videoFrame 视频原始数据
+/// @return 处理后的视频数据，SDK 内部不会调用 CFRetain 增加引用计数， 会调用 CFRelease 减少引用计数， 视频开发者创建的视频对象
+-(CMSampleBufferRef)OnCaptureVideoFrame:(CMSampleBufferRef)videoFrame;
+
+@end
+
+
+@interface LVRTCEngine (LocalRender)
+
+-(void)setVideoFrameCaptureCallback:(id<LVVideoFrameCaptureCallback>)renderCallback;
+
+@end
 
 @interface LVRTCEngine (DEPRECATED)
 
@@ -446,7 +486,16 @@ LV_EXPORT_CLASS
 /// @param replace true: 只推动设置的本地音频文件，不传输麦克风收录的音频  false：音频文件内容将会和麦克风采集的音频流进行混音
 /// @param loop 指定音频文件循环播放的次数，正整数：循环的次数 -1：无限循环
 /// @return 0 ： 方法调用成功，!0：失败
--(int)startAudioMixing:(NSString *)filePath replace:(BOOL)replace loop:(int)loop;
+-(int)startAudioMixing:(NSString *)filePath replace:(bool)replace loop:(int)loop;
+
+/// 是否使用国际版本，该接口已废弃，SDK 内部会自动调度到国际或国内服务
+/// @param env YES 为国际版本，NO 为国内版本
++ (void)setUseInternationalEnv:(bool)env;
+
+/// 设置手动管理视频输出方向，该方法需要先调用 enableVideoAutoRotateAdapter，将自动旋转方法关闭才能生效
+/// @param rotation 视频输出方向，（默认是 LVVideoRotation_0）
+-(void)setOutputVideoRotation:(LVVideoRotation)rotation;
+
 @end
 
 
