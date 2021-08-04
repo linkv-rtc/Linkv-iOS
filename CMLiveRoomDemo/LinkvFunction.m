@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
 
 -(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
     self.delegate = handler;
-    bool isTest = true;
+    bool isTest = false;
     _appId = isTest ? TEST_ENVIR : PRODUCT;
     _skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
     _viewModels = [NSMutableArray new];
@@ -362,17 +362,17 @@ typedef enum : NSUInteger {
     LV_LOGI(@"%s", __func__);
 }
 
-- (void)OnAudioData:(NSString *)uid
+- (void)OnAudioData:(NSString *)userId
          audio_data:(const void*)audio_data
     bits_per_sample:(int)bits_per_sample
         sample_rate:(int)sample_rate
  number_of_channels:(size_t)number_of_channels
    number_of_frames:(size_t)number_of_frames{
-    
+    [self.observer onPlaybackFrame:(int8_t *)audio_data numOfSamples:(int)number_of_frames bytesPerSample:bits_per_sample channels:(int)number_of_channels samplesPerSec:sample_rate];
 }
 
 - (void)OnAudioMixStream:(const int16_t *)data samples:(int)samples nchannel:(int)nchannel samplesPerChannel:(int)samplesPerChannel flag:(LVAudioRecordType)flag{
-    
+    [self.observer onRecordFrame:(int8_t *)data numOfSamples:samplesPerChannel * 2 bytesPerSample:2 channels:nchannel samplesPerSec:samples];
 }
 
 - (void)OnPublishQualityUpdate:(LVVideoStatistic *)quality{

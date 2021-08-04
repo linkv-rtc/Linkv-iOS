@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     kRoomStatus_BEAM    = 2
 };
 
-@interface CMEasyDemoViewController ()<IRtcEventManager>{
+@interface CMEasyDemoViewController ()<IRtcEventManager, AudioFrameObserver>{
     AgoraVideoEncoderConfiguration *_currentConfig;
     LinkvVideoSource *_videoSource;
 }
@@ -227,6 +227,8 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 
 -(void)onJoinChannelSuccess:(NSString *)channel uid:(int)uid elapsed:(int)elapsed{
     
+    [[LinkvFunction sharedFunction] registerAudioFrameObserver:(self)];
+    
 }
 
 -(void)onUserOffline:(int)uid reason:(int)reason{
@@ -314,14 +316,26 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 - (void)_removeRenderView {
     dispatch_async(dispatch_get_main_queue(), ^{
         for (NSString *key in self.renders) {
-            LVRTCDisplayView *displayView = [self.renders objectForKey:key];
-            [displayView removeFromSuperview];
-            [LVRTCEngine.sharedInstance removeDisplayView:displayView];
+            HinowView *displayView = [self.renders objectForKey:key];
+            [displayView.linkv removeFromSuperview];
+            [LVRTCEngine.sharedInstance removeDisplayView:displayView.linkv];
         }
         [self.renders removeAllObjects];
     });
 }
 
+
+-(bool)onPlaybackFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec{
+    NSLog(@"%s---%d",__func__, bytesPerSample);
+    return true;
+}
+
+-(bool)onRecordFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec{
+    
+    NSLog(@"%s---%d",__func__, bytesPerSample);
+    
+    return true;
+}
 
 /*
 #pragma mark - Navigation
