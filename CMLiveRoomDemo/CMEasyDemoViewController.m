@@ -231,7 +231,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     
 }
 
--(void)onUserOffline:(int)uid reason:(int)reason{
+- (void)rtcEngine:(id<AgoraFunction>)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason{
     
 }
 
@@ -242,31 +242,23 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     });
 }
 
--(void)onUserMuteAudio:(int)uid muted:(bool)muted{
+- (void)rtcEngine:(id<AgoraFunction>)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid{
     
 }
 
--(void)onFirstRemoteVideoDecoded:(int)uid width:(int)width height:(int)height elapsed:(int)elapsed{
+- (void)rtcEngine:(id<AgoraFunction>)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed{
     
 }
 
--(void)onRemoteVideoStateChanged:(int)uid state:(int)state reason:(int)reason elapsed:(int)elapsed{
+- (void)rtcEngine:(id<AgoraFunction>)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*>* _Nonnull)speakers totalVolume:(NSInteger)totalVolume{
     
 }
 
--(void)onAudioVolumeIndication:(NSArray <AgoraRtcAudioVolumeInfo *> *)speakers totalVolume:(int)totalVolume{
+- (void)rtcEngine:(id<AgoraFunction>)engine didOccurError:(AgoraErrorCode)errorCode{
     
 }
 
--(void)onRtcStats:(AgoraChannelStats *)stats{
-    
-}
-
--(void)onError:(int)err{
-    
-}
-
--(void)onLeaveChannel:(AgoraChannelStats *)stats{
+- (void)rtcEngine:(id<AgoraFunction>)engine didLeaveChannelWithStats:(AgoraChannelStats* _Nonnull)stats{
     
 }
 
