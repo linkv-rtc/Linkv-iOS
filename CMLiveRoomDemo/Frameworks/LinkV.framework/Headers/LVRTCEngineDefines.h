@@ -515,6 +515,9 @@ LV_EXPORT_CLASS
 /// 视频总发送字节数
 @property (nonatomic, assign) long long videosentKbytes;
 
+/// 视频发送总字节数
+@property (nonatomic, assign) long long videoreceKbytes;
+
 /// 视频输入、输出帧率（视频帧率）
 @property (nonatomic, assign) int       videoFps;
 

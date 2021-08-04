@@ -56,6 +56,7 @@ typedef enum : NSUInteger {
     BOOL _isJoining;
     LinkvRoomState _roomState;
     NSMutableArray *_viewModels;
+    int64_t _startTime;
 }
 
 +(instancetype)sharedFunction{
@@ -181,6 +182,7 @@ typedef enum : NSUInteger {
     if (_clientRole == AgoraClientRoleBroadcaster) {
         isHost = true;
     }
+    _lastStats = [[AgoraChannelStats alloc]init];
     // 增加正在加入中的熟悉，由于首次调用存在鉴权，故需要等鉴权完成之后调用加入房间接口，用户如果未等鉴权成功就离开，则不需要调用加入房间流程
     _roomState = LinkvRoomStateIdle;
     _currentUserId = optionalUid;
@@ -322,6 +324,7 @@ typedef enum : NSUInteger {
             }
         }
     }
+    _startTime = (long long)(NSDate.date.timeIntervalSince1970 * 1000);
     _roomState = LinkvRoomStateConnected;
     if (self.source) {
         [[LVRTCEngine sharedInstance] startPublishing];
@@ -374,11 +377,22 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnPublishQualityUpdate:(LVVideoStatistic *)quality{
-    
+    _lastStats.gatewayRtt = quality.audioRtt > quality.videoRtt ? quality.videoRtt : quality.audioRtt;
+    _lastStats.cpuTotalUsage = quality.cpuusage * 100;
+    _lastStats.memoryAppUsageRatio = quality.memoryusage;
+    _lastStats.duration = ((NSDate.date.timeIntervalSince1970 * 1000) - _startTime)/1000;
+    _lastStats.txBytes += quality.videosentKbytes * 1000;
+    _lastStats.txVideoBytes += quality.videosentKbytes * 1000;
+    _lastStats.txPacketLossRate = quality.videoLostPercent;
+    if ([self.delegate respondsToSelector:@selector(onRtcStats:)]) {
+        [self.delegate onRtcStats:_lastStats];
+    }
 }
 
 - (void)OnPlayQualityUpate:(LVVideoStatistic *)quality userId:(NSString*)userId{
-    
+    _lastStats.rxBytes += quality.videoreceKbytes * 1000;
+    _lastStats.rxVideoBytes += quality.videoreceKbytes * 1000;
+    _lastStats.rxPacketLossRate = quality.videoLostPercent;
 }
 
 - (void)OnPublishStateUpdate:(LVErrorCode)code{
