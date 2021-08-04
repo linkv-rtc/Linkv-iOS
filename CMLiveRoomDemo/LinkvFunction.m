@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
 
 -(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
     self.delegate = handler;
-    bool isTest = false;
+    bool isTest = true;
     _appId = isTest ? TEST_ENVIR : PRODUCT;
     _skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
     _viewModels = [NSMutableArray new];
@@ -84,7 +84,7 @@ typedef enum : NSUInteger {
         completion(YES, uuid);
     }
     else{
-        LV_LOGI(@"Auth: %@", uuid);
+        LV_LOGI(@"auth: %@", uuid);
         [[LVRTCEngine sharedInstance] auth:_appId skStr:_skStr userId:uuid completion:^(LVErrorCode code) {
             _isAuthSucceed = (code == LVErrorCodeSuccess);
             completion(_isAuthSucceed, uuid);
@@ -93,11 +93,33 @@ typedef enum : NSUInteger {
 }
 
 -(void)setLogFilter:(int)filter{
-    
+    switch (filter) {
+        case AgoraLogFilterOff:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityNone)];
+            break;
+        case AgoraLogFilterDebug:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityVerbose)];
+            break;
+        case AgoraLogFilterInfo:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityInfo)];
+            break;
+        case AgoraLogFilterWarning:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityWarning)];
+            break;
+        case AgoraLogFilterError:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityError)];
+            break;
+        case AgoraLogFilterCritical:
+            [LVRTCEngine setLogLevel:(kLVLoggingSeverityInfo)];
+            break;
+        default:
+            break;
+    }
 }
 
 -(void)fileSizeInKBytes:(int)fileSizeInKBytes{
-    
+    // SDK 内部默认日志保存大小为 3M，最多保存 15 个文件，日志获取成功后自动删除
+    LV_LOGI(@"fileSizeInKBytes:%d", fileSizeInKBytes);
 }
 
 -(int)setVideoEncoderConfiguration:(AgoraVideoEncoderConfiguration *)config{
@@ -169,7 +191,7 @@ typedef enum : NSUInteger {
             [[LVRTCEngine sharedInstance] loginRoom:userId roomId:channelName isHost:isHost isOnlyAudio:false delegate:self];
         }
         else{
-            LV_LOGE(@"Auth result:%@, uuid:%@", @(success == YES), uuid);
+            LV_LOGE(@"auth result:%@, uuid:%@ joining:%@", @(success == YES), uuid, @(_isJoining));
         }
     }];
     return 0;
@@ -183,9 +205,7 @@ typedef enum : NSUInteger {
     _roomState = LinkvRoomStateIdle;
     @synchronized (self) {
         for (HinowView *model in _viewModels) {
-            if (model.linkv) {
-                [[LVRTCEngine sharedInstance] removeDisplayView:model.linkv];
-            }
+            [[LVRTCEngine sharedInstance] removeDisplayView:model.linkv];
         }
         [_viewModels removeAllObjects];
     }
@@ -214,7 +234,6 @@ typedef enum : NSUInteger {
 }
 
 -(int)setupRemoteVideo:(HinowView *)surfaceView{
-    
     if (!surfaceView.linkv || !surfaceView.linkv.uid) {
         LV_LOGI(@"Invalid surfaceView, linkv is nil or uid is nil");
         return -1;
@@ -287,6 +306,9 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnEnterRoomComplete:(LVErrorCode)code users:(nullable NSArray<LVUser*>*)users{
+    if ([self.delegate respondsToSelector:@selector(onJoinChannelSuccess:uid:elapsed:)]) {
+        [self.delegate onJoinChannelSuccess:_channelId uid:_currentUserId elapsed:0];
+    }
     for (LVUser *user in users) {
         int uid = [user.userId intValue];
         if (uid == _currentUserId) {
