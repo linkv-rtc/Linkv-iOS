@@ -222,7 +222,9 @@ typedef enum : NSUInteger {
     }
     if (!_isJoining) return 0;
     _isJoining = NO;
-    leaveChannelBlock(_lastStats);
+    if (leaveChannelBlock) {
+        leaveChannelBlock(_lastStats);
+    }
     [[LVRTCEngine sharedInstance] logoutRoom:^(LVErrorCode code) {
         LV_LOGI(@"logoutRoom:%ld", (long)code);
     }];
@@ -360,17 +362,12 @@ typedef enum : NSUInteger {
         if (uid == _currentUserId) {
             continue;
         }
-        if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
-            [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
-        }
-        @synchronized (self) {
-            for (HinowView *view in _viewModels) {
-                if (view.linkv.uid.intValue == uid) {
-                    [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
-                    break;
-                }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
+                [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
             }
-        }
+        });
+        [[LVRTCEngine sharedInstance] startPlayingStream:user.userId];
     }
     _startTime = (long long)(NSDate.date.timeIntervalSince1970 * 1000);
     _roomState = LinkvRoomStateConnected;
@@ -403,24 +400,22 @@ typedef enum : NSUInteger {
 
 - (void)OnAddRemoter:(LVUser *)user{
     int uid = [user.userId intValue];
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
-        [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
-    }
-    @synchronized (self) {
-        for (HinowView *view in _viewModels) {
-            if (view.linkv.uid.intValue == uid) {
-                [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
-                break;
-            }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
+            [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
         }
-    }
+    });
+    [[LVRTCEngine sharedInstance] startPlayingStream:user.userId];
 }
 
 - (void)OnDeleteRemoter:(NSString*)userId{
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
-        int uid = [userId intValue];
-        [self.delegate rtcEngine:self didOfflineOfUid:uid reason:0];
-    }
+    [[LVRTCEngine sharedInstance] stopPlayingStream:userId];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
+            int uid = [userId intValue];
+            [self.delegate rtcEngine:self didOfflineOfUid:uid reason:0];
+        }
+    });
 }
 
 - (void)OnMixComplete:(LVErrorCode)code{
