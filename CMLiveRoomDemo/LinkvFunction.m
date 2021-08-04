@@ -18,6 +18,8 @@
 
 typedef void(^LinkvAuthCompletion)(BOOL success, NSString *uuid);
 
+typedef void(^LinkvJoinCompletion)(NSString* _Nonnull channel, NSUInteger uid, NSInteger elapsed);
+
 
 typedef enum : NSUInteger {
     LinkvRoomStateIdle,
@@ -58,6 +60,7 @@ typedef enum : NSUInteger {
     LinkvRoomState _roomState;
     NSMutableArray *_viewModels;
     int64_t _startTime;
+    LinkvJoinCompletion _completion;
 }
 
 +(instancetype)sharedFunction{
@@ -179,22 +182,24 @@ typedef enum : NSUInteger {
     return 0;
 }
 
--(int)joinChannel:(NSString *)token channelName:(NSString *)channelName optionalInfo:(NSString *)optionalInfo optionalUid:(int)optionalUid{
-    NSString *userId = [NSString stringWithFormat:@"%d", optionalUid];
+- (int)joinChannelByToken:(NSString* _Nullable)token channelId:(NSString* _Nonnull)channelId info:(NSString* _Nullable)info uid:(NSUInteger)uid joinSuccess:(void (^_Nullable)(NSString* _Nonnull channel, NSUInteger uid, NSInteger elapsed))joinSuccessBlock{
+    
+    NSString *userId = [NSString stringWithFormat:@"%d", (int)uid];
     bool isHost = false;
-    _channelId = channelName;
+    _channelId = channelId;
     if (_clientRole == AgoraClientRoleBroadcaster) {
         isHost = true;
     }
     _lastStats = [[AgoraChannelStats alloc]init];
     // 增加正在加入中的熟悉，由于首次调用存在鉴权，故需要等鉴权完成之后调用加入房间接口，用户如果未等鉴权成功就离开，则不需要调用加入房间流程
     _roomState = LinkvRoomStateIdle;
-    _currentUserId = optionalUid;
+    _currentUserId = (int)uid;
+    _completion = joinSuccessBlock;
     _isJoining = YES;
     // SDK 仅鉴权一次
     [self auth:^(BOOL success, NSString *uuid) {
         if (success && _isJoining) {
-            [[LVRTCEngine sharedInstance] loginRoom:userId roomId:channelName isHost:isHost isOnlyAudio:false delegate:self];
+            [[LVRTCEngine sharedInstance] loginRoom:userId roomId:channelId isHost:isHost isOnlyAudio:false delegate:self];
         }
         else{
             LV_LOGE(@"auth result:%@, uuid:%@ joining:%@", @(success == YES), uuid, @(_isJoining));
@@ -203,10 +208,9 @@ typedef enum : NSUInteger {
     return 0;
 }
 
--(int)leaveChannel{
+- (int)leaveChannel:(void (^_Nullable)(AgoraChannelStats* _Nonnull stat))leaveChannelBlock{
+    _completion = nil;
     // 如果用户未加入房间，则直接退出即可
-    if (!_isJoining) return 0;
-    _isJoining = NO;
     _firstFrameReported = false;
     _firstFramePublishReported = false;
     _roomState = LinkvRoomStateIdle;
@@ -216,14 +220,27 @@ typedef enum : NSUInteger {
         }
         [_viewModels removeAllObjects];
     }
+    if (!_isJoining) return 0;
+    _isJoining = NO;
+    leaveChannelBlock(_lastStats);
     [[LVRTCEngine sharedInstance] logoutRoom:^(LVErrorCode code) {
         LV_LOGI(@"logoutRoom:%ld", (long)code);
     }];
     return 0;
 }
 
+-(int)enableLocalAudio:(BOOL)enabled{
+    [[LVRTCEngine sharedInstance] enableMic:enabled];
+    return 0;
+}
+
 -(int)muteLocalAudioStream:(bool)muted{
     [[LVRTCEngine sharedInstance] enableMic:!muted];
+    return 0;
+}
+
+-(int)setEnableSpeakerphone:(BOOL)enableSpeaker{
+    [[LVRTCEngine sharedInstance] enableSpeakerphone:enableSpeaker];
     return 0;
 }
 
@@ -233,7 +250,7 @@ typedef enum : NSUInteger {
     return 0;
 }
 
--(int)muteRemoteAudioStream:(int)uid muted:(bool)muted{
+-(int)muteRemoteAudioStream:(int)uid mute:(bool)muted{
     NSString *userId = [NSString stringWithFormat:@"%d", uid];
     int volume = muted ? 0 : 100;
     [[LVRTCEngine sharedInstance] setPlayVolume:volume userId:userId];
@@ -330,6 +347,10 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnEnterRoomComplete:(LVErrorCode)code users:(nullable NSArray<LVUser*>*)users{
+    if (_completion) {
+        _completion(_channelId, _currentUserId, 0);
+    }
+    _completion = nil;
     if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinChannel:withUid:elapsed:)]) {
         [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
     }

@@ -45,15 +45,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)setVideoSource:(id<AgoraVideoSourceProtocol>)source;
 
--(int)joinChannel:(NSString *)token channelName:(NSString *)channelName optionalInfo:(nullable NSString *)optionalInfo optionalUid:(int)optionalUid;
+-(int)joinChannelByToken:(NSString* _Nullable)token channelId:(NSString* _Nonnull)channelId info:(NSString* _Nullable)info uid:(NSUInteger)uid joinSuccess:(void (^_Nullable)(NSString* _Nonnull channel, NSUInteger uid, NSInteger elapsed))joinSuccessBlock;
 
--(int)leaveChannel;
+-(int)leaveChannel:(void (^_Nullable)(AgoraChannelStats* _Nonnull stat))leaveChannelBlock;
 
 -(int)muteLocalAudioStream:(bool)muted;
 
+-(int)enableLocalAudio:(BOOL)enabled;
+
 -(int)registerAudioFrameObserver:(id<AudioFrameObserver>)observer;
 
--(int)muteRemoteAudioStream:(int)uid muted:(bool)muted;
+-(int)muteRemoteAudioStream:(int)uid mute:(bool)mute;
 
 -(int)setupRemoteVideo:(HinowView *)surfaceView;
 
@@ -66,6 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(int)stopPreview;
 
 -(int)switchCamera;
+
+-(int)setEnableSpeakerphone:(BOOL)enableSpeaker;
 
 @end
 

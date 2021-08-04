@@ -188,7 +188,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
         self.status = kRoomStatus_JOINED;
         [[LinkvFunction sharedFunction] create:@"" handler:self];
         NSString* room_id = self.roomIdText.text;
-        [[LinkvFunction sharedFunction] joinChannel:@"" channelName:room_id optionalInfo:nil optionalUid:self.userId.intValue];
+        [[LinkvFunction sharedFunction] joinChannelByToken:@"" channelId:room_id info:nil uid:self.userId.intValue joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
+            
+        }];
     }
 }
 
@@ -218,7 +220,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 - (IBAction)onExitClick:(id)sender {
     NSLog(@"Click exit room : %@", self.roomIdText.text);
     [self _reset];
-    [[LinkvFunction sharedFunction] leaveChannel];
+    [[LinkvFunction sharedFunction] leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
+        
+    }];
 }
 - (IBAction)mixAudioButtonClick:(id)sender {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"audio" ofType:@"mp3"];
