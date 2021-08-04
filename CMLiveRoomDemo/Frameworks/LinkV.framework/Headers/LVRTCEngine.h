@@ -133,6 +133,17 @@ LV_EXPORT_CLASS
 /// @param streamId 流 ID，默认为空字符串，如果使用自定义视频流时为自定义视频流对应的流名称
 - (void)OnReceivedFirstAudioFrame:(NSString *)userId streamId:(NSString *)streamId;
 
+/// 收到房间内消息
+/// @param message 消息内容
+- (void)OnReceiveRoomMessage:(NSString *)userId message:(NSString *)message;
+
+
+/// 远端用户打开和关闭麦克风事件回调
+/// @param userId 远端用户 ID
+/// @param enabled true： 麦克风打开， false：麦克风关闭
+- (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled;
+
+
 @end
 
 
@@ -460,6 +471,10 @@ LV_EXPORT_CLASS
 /// @return 0 : 停止录制成功，其他 : 停止录制失败
 - (int)stopRecorder:(NSString*)userId;
 
+/// 发送房间自定义信令
+/// @param message 消息内容
+/// @return 0 成功，其他失败
+- (int)sendRoomMessage:(NSString *)message;
 
 @end
 

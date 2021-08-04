@@ -26,6 +26,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <libCNamaSDK/FURenderer.h>
 #import "CMButton.h"
+#import "AgoraFunction.h"
 
 //#define kCMUseFileCapturer          true
 
