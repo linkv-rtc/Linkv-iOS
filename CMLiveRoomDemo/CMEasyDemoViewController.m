@@ -232,7 +232,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 }
 
 - (void)rtcEngine:(id<AgoraFunction>)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason{
-    
+    NSString *userId = [NSString stringWithFormat:@"%@", @(uid)];
+    HinowView *view = [self.renders objectForKey:userId];
+    [view.linkv removeFromSuperview];
 }
 
 - (void)rtcEngine:(id<AgoraFunction>)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed{

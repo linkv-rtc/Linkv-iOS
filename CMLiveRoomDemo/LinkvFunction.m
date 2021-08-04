@@ -248,6 +248,7 @@ typedef enum : NSUInteger {
     @synchronized (self) {
         [_viewModels addObject:surfaceView];
     }
+    LV_LOGI(@"setupRemoteVideo:%@", surfaceView.linkv.uid);
     [[LVRTCEngine sharedInstance] addDisplayView:surfaceView.linkv];
     if (_roomState == LinkvRoomStateConnected) {
         [[LVRTCEngine sharedInstance] startPlayingStream:surfaceView.linkv.uid];
@@ -256,6 +257,21 @@ typedef enum : NSUInteger {
 }
 
 -(int)setRemoteVideoStreamType:(int)uid streamType:(int)streamType{
+    return 0;
+}
+
+-(int)setParameters:(NSString* _Nonnull)options{
+    return 0;
+}
+-(int)startPreview{
+    return 0;
+}
+
+-(int)stopPreview{
+    return 0;
+}
+
+-(int)switchCamera{
     return 0;
 }
 
@@ -326,11 +342,12 @@ typedef enum : NSUInteger {
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
             [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
         }
-        
-        for (HinowView *view in _viewModels) {
-            if (view.linkv.uid.intValue == uid) {
-                [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
-                break;
+        @synchronized (self) {
+            for (HinowView *view in _viewModels) {
+                if (view.linkv.uid.intValue == uid) {
+                    [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
+                    break;
+                }
             }
         }
     }
@@ -364,14 +381,21 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnAddRemoter:(LVUser *)user{
+    int uid = [user.userId intValue];
     if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
-        int uid = [user.userId intValue];
         [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
+    }
+    @synchronized (self) {
+        for (HinowView *view in _viewModels) {
+            if (view.linkv.uid.intValue == uid) {
+                [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
+                break;
+            }
+        }
     }
 }
 
 - (void)OnDeleteRemoter:(NSString*)userId{
-    
     if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
         int uid = [userId intValue];
         [self.delegate rtcEngine:self didOfflineOfUid:uid reason:0];

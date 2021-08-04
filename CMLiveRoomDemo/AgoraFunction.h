@@ -59,6 +59,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)setRemoteVideoStreamType:(int)uid streamType:(int)streamType;
 
+-(int)setParameters:(NSString* _Nonnull)options;
+
+-(int)startPreview;
+
+-(int)stopPreview;
+
+-(int)switchCamera;
+
 @end
 
 NS_ASSUME_NONNULL_END
