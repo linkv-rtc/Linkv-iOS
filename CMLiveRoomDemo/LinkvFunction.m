@@ -343,9 +343,11 @@ typedef enum : NSUInteger {
 #pragma mark - LVRTCEngineDelegate
 - (void)OnRoomReconnected{
     LV_LOGI(@"%s", __func__);
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
-        [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateConnected reason:0];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
+            [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateConnected reason:0];
+        }
+    });
 }
 
 - (void)OnEnterRoomComplete:(LVErrorCode)code users:(nullable NSArray<LVUser*>*)users{
@@ -353,9 +355,11 @@ typedef enum : NSUInteger {
         _completion(_channelId, _currentUserId, 0);
     }
     _completion = nil;
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinChannel:withUid:elapsed:)]) {
-        [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinChannel:withUid:elapsed:)]) {
+            [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
+        }
+    });
     
     for (LVUser *user in users) {
         int uid = [user.userId intValue];
@@ -377,24 +381,28 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnExitRoomComplete{
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didLeaveChannelWithStats:)]) {
-        [self.delegate rtcEngine:self didLeaveChannelWithStats:_lastStats];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didLeaveChannelWithStats:)]) {
+            [self.delegate rtcEngine:self didLeaveChannelWithStats:_lastStats];
+        }
+    });
 }
 
 - (void)OnRoomDisconnected:(LVErrorCode)code{
     LV_LOGE(@"OnRoomDisconnected:%d", (int)code);
-    if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
-        [self.delegate rtcEngineConnectionDidLost:self];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
-        [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateFailed reason:0];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
-        [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_RoomDisconnected];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
+            [self.delegate rtcEngineConnectionDidLost:self];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
+            [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateFailed reason:0];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
+            [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_RoomDisconnected];
+        }
+    });
     _roomState = LinkvRoomStateDisconnect;
 }
 
@@ -456,9 +464,11 @@ typedef enum : NSUInteger {
     LV_LOGI(@"OnPublishStateUpdate:%d", (int)code);
     if (!_firstFramePublishReported) {
         _firstFramePublishReported = YES;
-        if ([self.delegate respondsToSelector:@selector(rtcEngine:firstLocalVideoFramePublished:)]) {
-            [self.delegate rtcEngine:self firstLocalVideoFramePublished:0];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(rtcEngine:firstLocalVideoFramePublished:)]) {
+                [self.delegate rtcEngine:self firstLocalVideoFramePublished:0];
+            }
+        });
     }
 }
 
@@ -478,9 +488,11 @@ typedef enum : NSUInteger {
         max = volume.volume > max ? volume.volume : max;
         [levels addObject:info];
     }
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:reportAudioVolumeIndicationOfSpeakers:totalVolume:)]) {
-        [self.delegate rtcEngine:self reportAudioVolumeIndicationOfSpeakers:levels totalVolume:max];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:reportAudioVolumeIndicationOfSpeakers:totalVolume:)]) {
+            [self.delegate rtcEngine:self reportAudioVolumeIndicationOfSpeakers:levels totalVolume:max];
+        }
+    });
 }
 
 - (int64_t)OnDrawFrame:(CVPixelBufferRef)pixelBuffer
@@ -490,29 +502,36 @@ typedef enum : NSUInteger {
         _firstFrameReported = true;
         int width = (int)CVPixelBufferGetWidth(pixelBuffer);
         int height = (int)CVPixelBufferGetHeight(pixelBuffer);
-        if ([self.delegate respondsToSelector:@selector(rtcEngine:firstRemoteVideoDecodedOfUid:size:elapsed:)]) {
-            int uid = userId.intValue;
-            [self.delegate rtcEngine:self firstRemoteVideoDecodedOfUid:uid size:CGSizeMake(width, height) elapsed:0];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            LV_LOGI(@"OnReceiveFirstFrame:%@", userId);
+            if ([self.delegate respondsToSelector:@selector(rtcEngine:firstRemoteVideoDecodedOfUid:size:elapsed:)]) {
+                int uid = userId.intValue;
+                [self.delegate rtcEngine:self firstRemoteVideoDecodedOfUid:uid size:CGSizeMake(width, height) elapsed:0];
+            }
+        });
     }
     return 0;
 }
 
 - (void)OnKickOff:(NSInteger)reason roomId:(NSString *)roomId{
     LV_LOGI(@"OnKickOff: %@ reason:%d", roomId, (int)reason);
-    if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
-        [self.delegate rtcEngineConnectionDidLost:self];
-    }
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
-        [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_OnKickOff];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
+            [self.delegate rtcEngineConnectionDidLost:self];
+        }
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
+            [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_OnKickOff];
+        }
+    });
 }
 
 - (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled{
-    if ([self.delegate respondsToSelector:@selector(rtcEngine:didAudioMuted:byUid:)]) {
-        int uid = userId.intValue;
-        [self.delegate rtcEngine:self didAudioMuted:!enabled byUid:uid];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didAudioMuted:byUid:)]) {
+            int uid = userId.intValue;
+            [self.delegate rtcEngine:self didAudioMuted:!enabled byUid:uid];
+        }
+    });
 }
 
 - (void)AudioMixerCurrentPlayingTime:(int)time_ms{
