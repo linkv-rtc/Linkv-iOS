@@ -27,6 +27,7 @@
 #import <libCNamaSDK/FURenderer.h>
 #import "CMButton.h"
 #import "AgoraFunction.h"
+#import "LinkvFunction.h"
 
 //#define kCMUseFileCapturer          true
 

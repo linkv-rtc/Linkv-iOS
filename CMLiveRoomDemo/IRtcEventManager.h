@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)onRemoteVideoStateChanged:(int)uid state:(int)state reason:(int)reason elapsed:(int)elapsed;
 
--(void)onAudioVolumeIndication:(int)speakers totalVolume:(int)totalVolume;
+-(void)onAudioVolumeIndication:(NSArray <AgoraRtcAudioVolumeInfo *> *)speakers totalVolume:(int)totalVolume;
 
 -(void)onRtcStats:(AgoraChannelStats *)stats;
 

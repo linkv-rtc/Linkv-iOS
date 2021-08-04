@@ -8,7 +8,9 @@
 
 #import "CMEasyDemoViewController.h"
 #import "Masonry.h"
-#import <LinkV/LinkV.h>
+#import "LinkvFunction.h"
+#import "LVRTCFileCapturer.h"
+#import "LinkvVideoSource.h"
 
 #define USE_TEST true
 
@@ -29,16 +31,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     kRoomStatus_BEAM    = 2
 };
 
-@interface LVRTCEngine (Ext)
-+ (void)setDevMode:(bool)isDevMode;
-
-+ (void)setDebugMode:(bool)isDebugMode;
-
-@end
-
-
-@interface CMEasyDemoViewController ()<LVRTCEngineDelegate>
-
+@interface CMEasyDemoViewController ()<IRtcEventManager>{
+    AgoraVideoEncoderConfiguration *_currentConfig;
+    LinkvVideoSource *_videoSource;
+}
 @property (weak, nonatomic) IBOutlet UITextField *          roomIdText;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *   hostSegmented;
 @property (weak, nonatomic) IBOutlet UIButton *             startBtn;
@@ -53,13 +49,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 @property (assign, nonatomic) CGRect        frame;
 
 @property (strong, nonatomic) NSString*     userId;
-
-// sdk api
-@property (nonatomic, strong) LVRTCEngine *           cmApi;
 @property (nonatomic, strong) LVRTCDisplayView *    localView;
 
 /// 渲染视图列表
-@property (atomic, strong) NSMutableDictionary <NSString *, LVRTCDisplayView *> * renders;
+@property (atomic, strong) NSMutableDictionary <NSString *, HinowView *> * renders;
 
 @end
 
@@ -68,18 +61,24 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [LVRTCEngine initSdk];
     
-    self.roomIdText.text = [NSString stringWithFormat:@"%ld",((NSInteger)NSDate.date.timeIntervalSince1970 - 1583000000)];
     
-    int64_t datatime = [[[NSDate alloc] init] timeIntervalSince1970] * 1000;
-    self.userId             = [NSString stringWithFormat:@"U_%lld", datatime];
+    int room = ((long long)NSDate.date.timeIntervalSince1970) % 10000;
+    self.roomIdText.text = [NSString stringWithFormat:@"%d",room];
+    
+    self.userId             = [NSString stringWithFormat:@"%d", room + 1];
     self.status             = kRoomStatus_IDLE;
     self.isShowKeyboard     = false;
     self.frame              = self.view.frame;
-    self.cmApi              = [LVRTCEngine sharedInstance];
     self.localView          = nil;
     self.renders            = [NSMutableDictionary new];
+    
+    _currentConfig = [[AgoraVideoEncoderConfiguration alloc]initWithWidth:720 height:1280 frameRate:15 bitrate:1800 orientationMode:(AgoraVideoOutputOrientationModeAdaptative)];
+    [[LinkvFunction sharedFunction] setVideoEncoderConfiguration:_currentConfig];
+    
+    _videoSource = [[LinkvVideoSource alloc]init];
+    [[LinkvFunction sharedFunction] setVideoSource:_videoSource];
+    
     
     // 设置手势事件取消键盘
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -99,9 +98,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
                                                object:nil];
     
     [self _initLocalView];
-    
-    [self.cmApi startCapture];
-    
+    [_videoSource start];
 }
 - (IBAction)backButtonClick:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -189,32 +186,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
         self.isHost = (self.hostSegmented.selectedSegmentIndex == 0);
         self.roomIdText.enabled = NO;
         self.status = kRoomStatus_JOINED;
-        
+        [[LinkvFunction sharedFunction] create:@"" handler:self];
         NSString* room_id = self.roomIdText.text;
-        NSString *appId = USE_TEST ? TEST_ENVIR : PRODUCT;
-        NSString *sk = USE_TEST ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
-        
-        // 设置params
-        __weak typeof(self) weakSelf = self;
-        [self.cmApi auth:appId
-                             skStr:sk
-                            userId:self.userId
-                        completion:^(LVErrorCode code) {
-            __strong typeof(weakSelf) strong_self = weakSelf;
-            if (strong_self) {
-                if (code == LVErrorCodeSuccess) {
-                    NSLog(@"[CMSDK-Demo] Succeed to auth.");
-                    
-                    [strong_self.cmApi loginRoom:strong_self.userId
-                                          roomId:room_id
-                                          isHost:self.isHost
-                                     isOnlyAudio:false
-                                        delegate:strong_self];
-                } else {
-                    NSLog(@"[CMSDK-Demo] Failed to auth.");
-                }
-            }
-        }];
+        [[LinkvFunction sharedFunction] joinChannel:@"" channelName:room_id optionalInfo:nil optionalUid:self.userId.intValue];
     }
 }
 
@@ -222,11 +196,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     if (self.isHost) {
         return;
     }
-    
     NSLog(@"Click start beam : %@", self.roomIdText.text);
     if (self.status == kRoomStatus_JOINED && !self.isHost) {
         self.status = kRoomStatus_BEAM;
-        [self _startPublish];
+//        [self _startPublish];
     }
 }
 
@@ -238,9 +211,6 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     NSLog(@"Click stop beam : %@", self.roomIdText.text);
     if (self.status == kRoomStatus_BEAM && !self.isHost) {
         self.status = kRoomStatus_JOINED;
-        
-        [self.cmApi stopCapture];
-        [self.cmApi stopPublishing];
         [self _removeLocalView];
     }
 }
@@ -248,111 +218,54 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 - (IBAction)onExitClick:(id)sender {
     NSLog(@"Click exit room : %@", self.roomIdText.text);
     [self _reset];
-    [self.cmApi stopCapture];
-    [self.cmApi logoutRoom:^(LVErrorCode code) {
-        
-    }];
+    [[LinkvFunction sharedFunction] leaveChannel];
 }
 - (IBAction)mixAudioButtonClick:(id)sender {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"audio" ofType:@"mp3"];
     [[LVRTCEngine sharedInstance] startAudioMixing:path replace:YES loop:10];
 }
 
-
-#pragma mark -
-#pragma mark - CMRoomDelegate
-- (void)OnEnterRoomComplete:(LVErrorCode)result users:(nullable NSArray<LVUser *> *)users {
-    if (result != LVErrorCodeSuccess) {
-        NSLog(@"CMSDK- Error to enter room : %d", (int)result);
-        [self _reset];
-        return;
-    }
-    
-    if (self.status == kRoomStatus_JOINED) {
-        if (self.isHost) {
-            self.status = kRoomStatus_BEAM;
-            [self _startPublish];
-        } else {
-            for (LVUser * user in users) {
-                // 如果是自己, 记录 pull url. 用 streamid(!!!), 兼容 zego
-                if (![self.userId isEqualToString:user.userId]) {
-                    [self.cmApi startPlayingStream:user.userId];
-                    [self createRenderView:user.userId];
-                }
-            }
-        }
-    }
-}
-
-- (void)OnExitRoomComplete {
+-(void)onJoinChannelSuccess:(NSString *)channel uid:(int)uid elapsed:(int)elapsed{
     
 }
 
-- (void)OnAddRemoter:(nonnull NSArray<LVUser *> *)users {
-    for (LVUser * user in users) {
-        // 如果是自己, 记录 pull url. 用 streamid(!!!), 兼容 zego
-        if (![self.userId isEqualToString:user.userId]) {
-            [self.cmApi startPlayingStream:user.userId];
-            [self createRenderView:user.userId];
-        }
-    }
+-(void)onUserOffline:(int)uid reason:(int)reason{
+    
 }
 
-- (void)OnDeleteRemoter:(nonnull NSString *)uid {
-    [self.cmApi stopPlayingStream:uid];
+-(void)onUserJoined:(int)uid elapsed:(int)elapsed{
+    NSString *userId = [NSString stringWithFormat:@"%d", uid];
     dispatch_async(dispatch_get_main_queue(), ^{
-        LVRTCDisplayView *displayView = [self.renders objectForKey:uid];
-        [displayView removeFromSuperview];
-        [LVRTCEngine.sharedInstance removeDisplayView:displayView];
-        [self.renders removeObjectForKey:uid];
+        [self createRenderView:userId];
     });
 }
 
-- (void)OnAudioData:(nonnull NSString *)uid audio_data:(nonnull const void *)audio_data bits_per_sample:(int)bits_per_sample sample_rate:(int)sample_rate number_of_channels:(size_t)number_of_channels number_of_frames:(size_t)number_of_frames {
+-(void)onUserMuteAudio:(int)uid muted:(bool)muted{
     
 }
 
-- (void)OnAudioMixStream:(nonnull const int16_t *)data samples:(int)samples nchannel:(int)nchannel flag:(LVAudioRecordType)flag {
+-(void)onFirstRemoteVideoDecoded:(int)uid width:(int)width height:(int)height elapsed:(int)elapsed{
     
 }
 
-- (void)OnMixComplete:(LVErrorCode)code {
+-(void)onRemoteVideoStateChanged:(int)uid state:(int)state reason:(int)reason elapsed:(int)elapsed{
     
 }
 
-- (void)OnPlayQualityUpate:(nonnull LVVideoStatistic *)quality userId:(nonnull NSString *)userId {
+-(void)onAudioVolumeIndication:(NSArray <AgoraRtcAudioVolumeInfo *> *)speakers totalVolume:(int)totalVolume{
     
 }
 
-- (void)OnPlayStateUpdate:(LVErrorCode)code userId:(nonnull NSString *)userId {
+-(void)onRtcStats:(AgoraChannelStats *)stats{
     
 }
 
-- (void)OnPublishQualityUpdate:(nonnull LVVideoStatistic *)quality {
+-(void)onError:(int)err{
     
 }
 
-- (void)OnPublishStateUpdate:(LVErrorCode)code {
+-(void)onLeaveChannel:(AgoraChannelStats *)stats{
     
-}
-
-- (void)OnRoomDisconnect:(LVErrorCode)code {
-    
-}
-
-- (void)OnRoomReconnected {
-    
-}
-
-- (void)OnSoundLevelUpdate:(nonnull NSArray<LVAudioVolume *> *)soundLevels {
-    
-}
-
-
-#pragma mark -
-#pragma mark - Private API
-- (void)_startPublish {
-    [self.cmApi startPublishing];
 }
 
 - (void)_initLocalView {
@@ -363,14 +276,16 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 
 - (void)createRenderView:(NSString*)uid {
     dispatch_async(dispatch_get_main_queue(), ^{
-        LVRTCDisplayView *renderView = [self.renders objectForKey:uid];
-        if (!renderView) {
+        HinowView *view = [self.renders objectForKey:uid];
+        if (!view) {
             NSInteger count = self.renders.allValues.count;
-            renderView = [[LVRTCDisplayView alloc] initWithFrame:CGRectMake(10 + count%3 * (144 + 10), 30 + count/3 * (192 + 20), 144, 192)];
+            HinowView *view = [[HinowView alloc]init];
+            LVRTCDisplayView *renderView = [[LVRTCDisplayView alloc] initWithFrame:CGRectMake(10 + count%3 * (144 + 10), 30 + count/3 * (192 + 20), 144, 192)];
             [self.view insertSubview:renderView atIndex:1];
             renderView.uid = uid;
-            self.renders[uid] = renderView;
-            [self.cmApi addDisplayView:renderView];
+            view.linkv = renderView;
+            self.renders[uid] = view;
+            [[LinkvFunction sharedFunction] setupRemoteVideo:view];
             NSLog(@"CMSDK- Create render view : %@", uid);
         }
     });

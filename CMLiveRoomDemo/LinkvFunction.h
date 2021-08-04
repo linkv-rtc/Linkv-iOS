@@ -8,11 +8,26 @@
 
 #import <Foundation/Foundation.h>
 #import "AgoraFunction.h"
+#import <LinkV/LinkV.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+typedef enum : NSUInteger {
+    LinkvErrorCode_RoomDisconnected,
+    LinkvErrorCode_OnKickOff,
+} LinkvErrorCode;
+
+
+@interface HinowView : NSObject
+@property (nonatomic,strong)AgoraRtcVideoCanvas *agora;
+@property (nonatomic,strong)LVRTCDisplayView *linkv;
+@end
+
+
 @interface LinkvFunction : NSObject <AgoraFunction, AgoraVideoFrameConsumer>
 
++(instancetype)sharedFunction;
 
 @end
 

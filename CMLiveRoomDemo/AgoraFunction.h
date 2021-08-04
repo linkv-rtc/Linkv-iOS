@@ -13,6 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+@class HinowView;
 
 @protocol AudioFrameObserver <NSObject>
 
@@ -44,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)setVideoSource:(id<AgoraVideoSourceProtocol>)source;
 
--(int)joinChannel:(NSString *)token channelName:(NSString *)channelName optionalInfo:(NSString *)optionalInfo optionalUid:(int)optionalUid;
+-(int)joinChannel:(NSString *)token channelName:(NSString *)channelName optionalInfo:(nullable NSString *)optionalInfo optionalUid:(int)optionalUid;
 
 -(int)leaveChannel;
 
@@ -54,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)muteRemoteAudioStream:(int)uid muted:(bool)muted;
 
--(int)setupRemoteVideo:(UIView *)surfaceView;
+-(int)setupRemoteVideo:(HinowView *)surfaceView;
 
 -(int)setRemoteVideoStreamType:(int)uid streamType:(int)streamType;
 

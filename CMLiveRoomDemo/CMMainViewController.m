@@ -93,23 +93,28 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
         make.bottom.equalTo(self.lookButton.mas_top).offset(-30);
     }];
     
-    UITapGestureRecognizer *tapGestureClick = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(easyDemoClick)];
-    tapGestureClick.numberOfTapsRequired = 5;
-    [self.view addGestureRecognizer:tapGestureClick];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadLanguage) name:@"kCMAppReloadLanguage" object:nil];
-    [LVRTCEngine setUseInternationalEnv:YES];
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"RTCAppType"]) {
-        RTCAppType appType = [[NSUserDefaults standardUserDefaults] integerForKey:@"RTCAppType"];
-        [[RTCNetworkManager sharedManager] setAppType:appType];
+    BOOL enableEasyDemo = YES;
+    if (enableEasyDemo) {
+        UITapGestureRecognizer *tapGestureClick = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(easyDemoClick)];
+        tapGestureClick.numberOfTapsRequired = 5;
+        [self.view addGestureRecognizer:tapGestureClick];
     }
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"RTCAppEnvironment"]) {
-        RTCEnvironment environment = [[NSUserDefaults standardUserDefaults] integerForKey:@"RTCAppEnvironment"];
-        [[RTCNetworkManager sharedManager] setEnvironment:environment];
-    }
-    else{
-        [[RTCNetworkManager sharedManager] setEnvironment:RTCEnvironmentProduction];
+    if (!enableEasyDemo) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadLanguage) name:@"kCMAppReloadLanguage" object:nil];
+        [LVRTCEngine setUseInternationalEnv:YES];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"RTCAppType"]) {
+            RTCAppType appType = [[NSUserDefaults standardUserDefaults] integerForKey:@"RTCAppType"];
+            [[RTCNetworkManager sharedManager] setAppType:appType];
+        }
+        
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"RTCAppEnvironment"]) {
+            RTCEnvironment environment = [[NSUserDefaults standardUserDefaults] integerForKey:@"RTCAppEnvironment"];
+            [[RTCNetworkManager sharedManager] setEnvironment:environment];
+        }
+        else{
+            [[RTCNetworkManager sharedManager] setEnvironment:RTCEnvironmentProduction];
+        }
     }
     
     UITapGestureRecognizer *hideKeyboard = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyboardClick)];
