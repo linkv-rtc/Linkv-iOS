@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 typedef enum : NSUInteger {
-    LinkvErrorCode_RoomDisconnected,
+    LinkvErrorCode_RoomDisconnected = 20000,
     LinkvErrorCode_OnKickOff,
 } LinkvErrorCode;
 

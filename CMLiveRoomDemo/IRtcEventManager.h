@@ -11,27 +11,37 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol AgoraFunction;
+
 @protocol IRtcEventManager <NSObject>
 
--(void)onJoinChannelSuccess:(NSString *)channel uid:(int)uid elapsed:(int)elapsed;
+-(void)rtcEngine:(id<AgoraFunction>)engine firstLocalVideoFramePublished:(NSInteger)elapsed;
 
--(void)onUserOffline:(int)uid reason:(int)reason;
+- (void)rtcEngine:(id<AgoraFunction>)engine didJoinChannel:(NSString *)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
 
--(void)onUserJoined:(int)uid elapsed:(int)elapsed;
+- (void)rtcEngine:(id<AgoraFunction>)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed;
 
--(void)onUserMuteAudio:(int)uid muted:(bool)muted;
+- (void)rtcEngine:(id<AgoraFunction>)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed;
 
--(void)onFirstRemoteVideoDecoded:(int)uid width:(int)width height:(int)height elapsed:(int)elapsed;
+- (void)rtcEngine:(id<AgoraFunction>)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid;
 
--(void)onRemoteVideoStateChanged:(int)uid state:(int)state reason:(int)reason elapsed:(int)elapsed;
+- (void)rtcEngine:(id<AgoraFunction>)engine didOccurError:(AgoraErrorCode)errorCode;
 
--(void)onAudioVolumeIndication:(NSArray <AgoraRtcAudioVolumeInfo *> *)speakers totalVolume:(int)totalVolume;
+- (void)rtcEngine:(id<AgoraFunction>)engine tokenPrivilegeWillExpire:(NSString *_Nonnull)token;
 
--(void)onRtcStats:(AgoraChannelStats *)stats;
+- (void)rtcEngineRequestToken:(id<AgoraFunction>)engine;
 
--(void)onError:(int)err;
+- (void)rtcEngine:(id<AgoraFunction>)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason;
 
--(void)onLeaveChannel:(AgoraChannelStats *)stats;
+- (void)rtcEngine:(id<AgoraFunction>)engine connectionChangedToState:(AgoraConnectionStateType)state reason:(AgoraConnectionChangedReason)reason;
+
+- (void)rtcEngineConnectionDidLost:(id<AgoraFunction>)engine;
+
+- (void)rtcEngine:(id<AgoraFunction>)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
+
+- (void)rtcEngine:(id<AgoraFunction>)engine didLeaveChannelWithStats:(AgoraChannelStats* _Nonnull)stats;
+
+- (void)rtcEngine:(id<AgoraFunction>)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*>* _Nonnull)speakers totalVolume:(NSInteger)totalVolume;
 @end
 
 NS_ASSUME_NONNULL_END

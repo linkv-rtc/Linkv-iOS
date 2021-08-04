@@ -225,7 +225,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     [[LVRTCEngine sharedInstance] startAudioMixing:path replace:YES loop:10];
 }
 
--(void)onJoinChannelSuccess:(NSString *)channel uid:(int)uid elapsed:(int)elapsed{
+- (void)rtcEngine:(id<AgoraFunction>)engine didJoinChannel:(NSString *)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed{
     
     [[LinkvFunction sharedFunction] registerAudioFrameObserver:(self)];
     
@@ -235,7 +235,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     
 }
 
--(void)onUserJoined:(int)uid elapsed:(int)elapsed{
+- (void)rtcEngine:(id<AgoraFunction>)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed{
     NSString *userId = [NSString stringWithFormat:@"%d", uid];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self createRenderView:userId];

@@ -52,6 +52,7 @@ typedef enum : NSUInteger {
     AgoraChannelStats *_lastStats;
     LVRTCDisplayView *_remoteDisplayView;
     bool _firstFrameReported;
+    bool _firstFramePublishReported;
     BOOL _isAuthSucceed;
     BOOL _isJoining;
     LinkvRoomState _roomState;
@@ -207,6 +208,7 @@ typedef enum : NSUInteger {
     if (!_isJoining) return 0;
     _isJoining = NO;
     _firstFrameReported = false;
+    _firstFramePublishReported = false;
     _roomState = LinkvRoomStateIdle;
     @synchronized (self) {
         for (HinowView *model in _viewModels) {
@@ -306,20 +308,25 @@ typedef enum : NSUInteger {
 #pragma mark - LVRTCEngineDelegate
 - (void)OnRoomReconnected{
     LV_LOGI(@"%s", __func__);
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
+        [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateConnected reason:0];
+    }
 }
 
 - (void)OnEnterRoomComplete:(LVErrorCode)code users:(nullable NSArray<LVUser*>*)users{
-    if ([self.delegate respondsToSelector:@selector(onJoinChannelSuccess:uid:elapsed:)]) {
-        [self.delegate onJoinChannelSuccess:_channelId uid:_currentUserId elapsed:0];
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinChannel:withUid:elapsed:)]) {
+        [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
     }
+    
     for (LVUser *user in users) {
         int uid = [user.userId intValue];
         if (uid == _currentUserId) {
             continue;
         }
-        if ([self.delegate respondsToSelector:@selector(onUserJoined:elapsed:)]) {
-            [self.delegate onUserJoined:uid elapsed:0];
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
+            [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
         }
+        
         for (HinowView *view in _viewModels) {
             if (view.linkv.uid.intValue == uid) {
                 [[LVRTCEngine sharedInstance] startPlayingStream:view.linkv.uid];
@@ -335,30 +342,39 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnExitRoomComplete{
-    if ([self.delegate respondsToSelector:@selector(onLeaveChannel:)]) {
-        [self.delegate onLeaveChannel:_lastStats];
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didLeaveChannelWithStats:)]) {
+        [self.delegate rtcEngine:self didLeaveChannelWithStats:_lastStats];
     }
 }
 
 - (void)OnRoomDisconnected:(LVErrorCode)code{
     LV_LOGE(@"OnRoomDisconnected:%d", (int)code);
-    if ([self.delegate respondsToSelector:@selector(onError:)]) {
-        [self.delegate onError:LinkvErrorCode_RoomDisconnected];
+    if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
+        [self.delegate rtcEngineConnectionDidLost:self];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
+        [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateFailed reason:0];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
+        [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_RoomDisconnected];
     }
     _roomState = LinkvRoomStateDisconnect;
 }
 
 - (void)OnAddRemoter:(LVUser *)user{
-    if ([self.delegate respondsToSelector:@selector(onUserJoined:elapsed:)]) {
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
         int uid = [user.userId intValue];
-        [self.delegate onUserJoined:uid elapsed:0];
+        [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
     }
 }
 
 - (void)OnDeleteRemoter:(NSString*)userId{
-    if ([self.delegate respondsToSelector:@selector(onUserOffline:reason:)]) {
+    
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
         int uid = [userId intValue];
-        [self.delegate onUserOffline:uid reason:0];
+        [self.delegate rtcEngine:self didOfflineOfUid:uid reason:0];
     }
 }
 
@@ -387,9 +403,7 @@ typedef enum : NSUInteger {
     _lastStats.txBytes += quality.videosentKbytes * 1000;
     _lastStats.txVideoBytes += quality.videosentKbytes * 1000;
     _lastStats.txPacketLossRate = quality.videoLostPercent;
-    if ([self.delegate respondsToSelector:@selector(onRtcStats:)]) {
-        [self.delegate onRtcStats:_lastStats];
-    }
+    _lastStats.userCount = 2;
 }
 
 - (void)OnPlayQualityUpate:(LVVideoStatistic *)quality userId:(NSString*)userId{
@@ -400,6 +414,12 @@ typedef enum : NSUInteger {
 
 - (void)OnPublishStateUpdate:(LVErrorCode)code{
     LV_LOGI(@"OnPublishStateUpdate:%d", (int)code);
+    if (!_firstFramePublishReported) {
+        _firstFramePublishReported = YES;
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:firstLocalVideoFramePublished:)]) {
+            [self.delegate rtcEngine:self firstLocalVideoFramePublished:0];
+        }
+    }
 }
 
 - (void)OnPlayStateUpdate:(LVErrorCode)code userId:(NSString*)userId{
@@ -418,8 +438,8 @@ typedef enum : NSUInteger {
         max = volume.volume > max ? volume.volume : max;
         [levels addObject:info];
     }
-    if ([self.delegate respondsToSelector:@selector(onAudioVolumeIndication:totalVolume:)]) {
-        [self.delegate onAudioVolumeIndication:levels totalVolume:max];
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:reportAudioVolumeIndicationOfSpeakers:totalVolume:)]) {
+        [self.delegate rtcEngine:self reportAudioVolumeIndicationOfSpeakers:levels totalVolume:max];
     }
 }
 
@@ -430,9 +450,9 @@ typedef enum : NSUInteger {
         _firstFrameReported = true;
         int width = (int)CVPixelBufferGetWidth(pixelBuffer);
         int height = (int)CVPixelBufferGetHeight(pixelBuffer);
-        if ([self.delegate respondsToSelector:@selector(onFirstRemoteVideoDecoded:width:height:elapsed:)]) {
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:firstRemoteVideoDecodedOfUid:size:elapsed:)]) {
             int uid = userId.intValue;
-            [self.delegate onFirstRemoteVideoDecoded:uid width:width height:height elapsed:0];
+            [self.delegate rtcEngine:self firstRemoteVideoDecodedOfUid:uid size:CGSizeMake(width, height) elapsed:0];
         }
     }
     return 0;
@@ -440,15 +460,18 @@ typedef enum : NSUInteger {
 
 - (void)OnKickOff:(NSInteger)reason roomId:(NSString *)roomId{
     LV_LOGI(@"OnKickOff: %@ reason:%d", roomId, (int)reason);
-    if ([self.delegate respondsToSelector:@selector(onError:)]) {
-        [self.delegate onError:LinkvErrorCode_OnKickOff];
+    if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
+        [self.delegate rtcEngineConnectionDidLost:self];
+    }
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
+        [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_OnKickOff];
     }
 }
 
 - (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled{
-    if ([self.delegate respondsToSelector:@selector(onUserMuteAudio:muted:)]) {
+    if ([self.delegate respondsToSelector:@selector(rtcEngine:didAudioMuted:byUid:)]) {
         int uid = userId.intValue;
-        [self.delegate onUserMuteAudio:uid muted:!enabled];
+        [self.delegate rtcEngine:self didAudioMuted:!enabled byUid:uid];
     }
 }
 
