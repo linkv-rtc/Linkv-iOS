@@ -85,6 +85,9 @@ typedef enum : NSUInteger {
         NSString *appId = isTest ? TEST_ENVIR : PRODUCT;
         NSString *skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
         LV_LOGI(@"auth: %@", uuid);
+        
+        // 设置推流质量监控回调间隔
+        [LVRTCEngine setPublishQualityMonitorCycle:1];
         [[LVRTCEngine sharedInstance] auth:appId skStr:skStr userId:uuid completion:^(LVErrorCode code) {
             _isAuthSucceed = (code == LVErrorCodeSuccess);
             completion(_isAuthSucceed, uuid);
