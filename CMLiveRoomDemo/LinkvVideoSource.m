@@ -38,6 +38,8 @@
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CMTime currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     [self.consumer consumePixelBuffer:pixelBuffer withTimestamp:currentTime rotation:(AgoraVideoRotationNone)];
+    CFRelease(sampleBuffer);
+    
 }
 
 - (void)didReadCompleted{

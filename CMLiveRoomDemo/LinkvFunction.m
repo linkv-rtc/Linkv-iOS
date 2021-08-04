@@ -104,8 +104,8 @@ typedef enum : NSUInteger {
     // 以 720P 进行视频采集，以用户自定义分辨率进行编码
     LVAVConfig *avConfig = [[LVAVConfig alloc]initWithVideoProfile:(LVRTCVideoProfile_720P)];
     avConfig.videoEncodeResolution = config.dimensions;
-    avConfig.bitrate = (int)config.bitrate;
-    avConfig.min_bitrate = (int)config.minBitrate;
+    avConfig.bitrate = (int)config.bitrate * 1000;
+    avConfig.min_bitrate = (int)config.minBitrate * 1000;
     avConfig.fps = (int)config.frameRate;
     switch (config.degradationPreference) {
         case AgoraDegradationMaintainFramerate:{
