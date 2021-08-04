@@ -48,13 +48,11 @@ typedef enum : NSUInteger {
     int _clientRole;
     int _clientProfile;
     int _currentUserId;
+    NSString *_channelId;
     AgoraChannelStats *_lastStats;
     LVRTCDisplayView *_remoteDisplayView;
     bool _firstFrameReported;
     BOOL _isAuthSucceed;
-    NSString *_channelId;
-    NSString *_appId;
-    NSString *_skStr;
     BOOL _isJoining;
     LinkvRoomState _roomState;
     NSMutableArray *_viewModels;
@@ -71,9 +69,6 @@ typedef enum : NSUInteger {
 
 -(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
     self.delegate = handler;
-    bool isTest = false;
-    _appId = isTest ? TEST_ENVIR : PRODUCT;
-    _skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
     _viewModels = [NSMutableArray new];
     return self;
 }
@@ -84,8 +79,12 @@ typedef enum : NSUInteger {
         completion(YES, uuid);
     }
     else{
+        bool isTest = true;
+        [LVRTCEngine setUseTestEnv:isTest];
+        NSString *appId = isTest ? TEST_ENVIR : PRODUCT;
+        NSString *skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
         LV_LOGI(@"auth: %@", uuid);
-        [[LVRTCEngine sharedInstance] auth:_appId skStr:_skStr userId:uuid completion:^(LVErrorCode code) {
+        [[LVRTCEngine sharedInstance] auth:appId skStr:skStr userId:uuid completion:^(LVErrorCode code) {
             _isAuthSucceed = (code == LVErrorCodeSuccess);
             completion(_isAuthSucceed, uuid);
         }];
@@ -186,6 +185,7 @@ typedef enum : NSUInteger {
     _roomState = LinkvRoomStateIdle;
     _currentUserId = optionalUid;
     _isJoining = YES;
+    // SDK 仅鉴权一次
     [self auth:^(BOOL success, NSString *uuid) {
         if (success && _isJoining) {
             [[LVRTCEngine sharedInstance] loginRoom:userId roomId:channelName isHost:isHost isOnlyAudio:false delegate:self];
@@ -295,9 +295,7 @@ typedef enum : NSUInteger {
     CFRelease(processedSampleBuffer);
 }
 
-- (void)consumeRawData:(void* _Nonnull)rawData withTimestamp:(CMTime)timestamp format:(AgoraVideoPixelFormat)format size:(CGSize)size rotation:(AgoraVideoRotation)rotation{
-    
-}
+- (void)consumeRawData:(void* _Nonnull)rawData withTimestamp:(CMTime)timestamp format:(AgoraVideoPixelFormat)format size:(CGSize)size rotation:(AgoraVideoRotation)rotation{}
 
 
 #pragma mark - LVRTCEngineDelegate
@@ -429,6 +427,14 @@ typedef enum : NSUInteger {
         [self.delegate onError:LinkvErrorCode_OnKickOff];
     }
 }
+
+- (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled{
+    if ([self.delegate respondsToSelector:@selector(onUserMuteAudio:muted:)]) {
+        int uid = userId.intValue;
+        [self.delegate onUserMuteAudio:uid muted:!enabled];
+    }
+}
+
 - (void)AudioMixerCurrentPlayingTime:(int)time_ms{
     
 }
@@ -447,13 +453,6 @@ typedef enum : NSUInteger {
 
 - (void)OnReceiveRoomMessage:(NSString *)userId message:(NSString *)message{
     
-}
-
-- (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled{
-    if ([self.delegate respondsToSelector:@selector(onUserMuteAudio:muted:)]) {
-        int uid = userId.intValue;
-        [self.delegate onUserMuteAudio:uid muted:!enabled];
-    }
 }
 
 @end

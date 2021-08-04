@@ -204,15 +204,15 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 }
 
 - (IBAction)onStopBeamClick:(id)sender {
-    if (self.isHost) {
-        return;
-    }
+    static BOOL mute = NO;
+    mute = !mute;
+    [[LinkvFunction sharedFunction] muteLocalAudioStream:mute];
     
     NSLog(@"Click stop beam : %@", self.roomIdText.text);
-    if (self.status == kRoomStatus_BEAM && !self.isHost) {
-        self.status = kRoomStatus_JOINED;
-        [self _removeLocalView];
-    }
+//    if (self.status == kRoomStatus_BEAM && !self.isHost) {
+//        self.status = kRoomStatus_JOINED;
+//        [self _removeLocalView];
+//    }
 }
 
 - (IBAction)onExitClick:(id)sender {
@@ -326,14 +326,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 
 
 -(bool)onPlaybackFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec{
-    NSLog(@"%s---%d",__func__, bytesPerSample);
     return true;
 }
 
 -(bool)onRecordFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec{
-    
-    NSLog(@"%s---%d",__func__, bytesPerSample);
-    
     return true;
 }
 
