@@ -129,12 +129,37 @@ typedef enum : NSUInteger {
     LV_LOGI(@"fileSizeInKBytes:%d", fileSizeInKBytes);
 }
 
+-(int)bitrateForPixels:(int)pixels {
+    if (pixels <= 320 * 180) {
+        return 300 * 1000;
+    }
+    else if (pixels <= 480 * 270){
+        return 500 * 1000;
+    }
+    else if (pixels <= 640 * 360){
+        return 800 * 1000;
+    }
+    else if (pixels <= 640 * 480){
+        return 1000 * 1000;
+    }
+    else if (pixels <= 960 * 540){
+        return 1200 * 1000;
+    }
+    else if (pixels <= 1280 * 720){
+        return 1800 * 1000;
+    }
+    else{
+        return 2400 * 1000;
+    }
+}
+
 -(int)setVideoEncoderConfiguration:(AgoraVideoEncoderConfiguration *)config{
     // 以 720P 进行视频采集，以用户自定义分辨率进行编码
     LVAVConfig *avConfig = [[LVAVConfig alloc]initWithVideoProfile:(LVRTCVideoProfile_720P)];
-    avConfig.videoEncodeResolution = config.dimensions;
-    avConfig.bitrate = (int)config.bitrate * 1000;
-    avConfig.min_bitrate = (int)config.minBitrate * 1000;
+    // 声网宽高和屏幕宽高
+    avConfig.videoEncodeResolution = CGSizeMake(config.dimensions.height, config.dimensions.width);
+    avConfig.bitrate = [self bitrateForPixels:(int)(config.dimensions.width * config.dimensions.height)];
+    avConfig.min_bitrate = (int)(avConfig.bitrate / 3.0);
     avConfig.fps = (int)config.frameRate;
     switch (config.degradationPreference) {
         case AgoraDegradationMaintainFramerate:{
