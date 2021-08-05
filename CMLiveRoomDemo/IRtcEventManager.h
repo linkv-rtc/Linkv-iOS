@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
+#import <LinkV/LinkV.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)rtcEngine:(id<AgoraFunction>)engine didLeaveChannelWithStats:(AgoraChannelStats* _Nonnull)stats;
 
 - (void)rtcEngine:(id<AgoraFunction>)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*>* _Nonnull)speakers totalVolume:(NSInteger)totalVolume;
+
+- (void)rtcEngine:(id<AgoraFunction>)engine onNetworkProbeContent:(LVNetworkProbeContent *)content;
 
 @end
 

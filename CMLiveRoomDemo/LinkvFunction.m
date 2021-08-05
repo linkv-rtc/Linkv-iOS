@@ -81,6 +81,11 @@ typedef enum : NSUInteger {
 
 -(void)OnNetworkProbeContent:(LVNetworkProbeContent *)probeContent{
     LV_LOGI(@"OnNetworkProbeContent, rtt:%d", probeContent.rtt);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:onNetworkProbeContent:)]) {
+            [self.delegate rtcEngine:self onNetworkProbeContent:probeContent];
+        }
+    });
 }
 
 -(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
@@ -108,12 +113,9 @@ typedef enum : NSUInteger {
         [LVRTCEngine setPublishQualityMonitorCycle:1];
         [[LVRTCEngine sharedInstance] auth:appId skStr:skStr userId:uuid completion:^(LVErrorCode code) {
             _isAuthSucceed = (code == LVErrorCodeSuccess);
-            
-            if (!_isAuthSucceed) _authFailedCount++;
-            if (_isAuthSucceed) {
-                _authFailedCount = 0;
+            if (!_isAuthSucceed) {
+                [self reportAuthError];
             }
-            [self reportAuthError];
             completion(_isAuthSucceed, uuid);
         }];
     }
