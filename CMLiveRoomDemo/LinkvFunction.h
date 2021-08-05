@@ -14,10 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 typedef enum : NSUInteger {
-    LinkvErrorCode_RoomDisconnected = 20000,
-    LinkvErrorCode_OnKickOff,
+    LinkvErrorCode_RoomDisconnected = 12010,
+    LinkvErrorCode_OnKickOff = 12011,
 } LinkvErrorCode;
 
+@interface LinkvAudioFrame : NSObject
+@property(assign, nonatomic) NSInteger samplesPerChannel;
+@property(assign, nonatomic) NSInteger bytesPerSample;
+@property(assign, nonatomic) NSInteger channels;
+@property(assign, nonatomic) NSInteger samplesPerSec;
+@property(strong, nonatomic) NSData* _Nullable buffer;
+@property(assign, nonatomic) int64_t renderTimeMs;
+@property(assign, nonatomic) NSInteger avSyncType;
+@end
 
 @interface HinowView : NSObject
 @property (nonatomic,strong)AgoraRtcVideoCanvas *agora;

@@ -17,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AudioFrameObserver <NSObject>
 
--(bool)onPlaybackFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec;
+- (BOOL)onRecordAudioFrame:(id)frame;
 
--(bool)onRecordFrame:(int8_t *)samples numOfSamples:(int)numOfSamples bytesPerSample:(int)bytesPerSample channels:(int)channels samplesPerSec:(int)samplesPerSec;
+- (BOOL)onPlaybackAudioFrame:(id)frame;
 
 @end
 
@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)setChannelProfile:(int)profile;
 
--(int)setPlaybackAudioFrameParameters:(int)sampleRate channel:(int)channel mode:(int)mode samplesPerCall:(int)samplesPerCall;
+-(int)setPlaybackAudioFrameParametersWithSampleRate:(int)sampleRate channel:(int)channel mode:(AgoraAudioRawFrameOperationMode)mode samplesPerCall:(int)samplesPerCall;
 
 -(int)setClientRole:(int)role;
 

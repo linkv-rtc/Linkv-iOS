@@ -33,6 +33,10 @@ typedef enum : NSUInteger {
 @end
 
 
+@implementation LinkvAudioFrame
+
+@end
+
 @implementation HinowView
 
 @end
@@ -63,6 +67,7 @@ typedef enum : NSUInteger {
     int64_t _startTime;
     LinkvJoinCompletion _completion;
     BOOL  _isFaceCamera;
+    int _authFailedCount;
 }
 
 +(instancetype)sharedFunction{
@@ -83,6 +88,7 @@ typedef enum : NSUInteger {
     _viewModels = [NSMutableArray new];
     _isFaceCamera = YES;
     [[LVRTCEngine sharedInstance] setNetworkProbeCallback:self];
+    [self auth:^(BOOL success, NSString *uuid) {}];
     return self;
 }
 
@@ -102,9 +108,23 @@ typedef enum : NSUInteger {
         [LVRTCEngine setPublishQualityMonitorCycle:1];
         [[LVRTCEngine sharedInstance] auth:appId skStr:skStr userId:uuid completion:^(LVErrorCode code) {
             _isAuthSucceed = (code == LVErrorCodeSuccess);
+            
+            if (!_isAuthSucceed) _authFailedCount++;
+            if (_isAuthSucceed) {
+                _authFailedCount = 0;
+            }
+            [self reportAuthError];
             completion(_isAuthSucceed, uuid);
         }];
     }
+}
+
+-(void)reportAuthError{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
+            [self.delegate rtcEngine:self didOccurError:LinkvErrorCode_RoomDisconnected];
+        }
+    });
 }
 
 -(void)setLogFilter:(int)filter{
@@ -197,7 +217,7 @@ typedef enum : NSUInteger {
     return 0;
 }
 
--(int)setPlaybackAudioFrameParameters:(int)sampleRate channel:(int)channel mode:(int)mode samplesPerCall:(int)samplesPerCall{
+-(int)setPlaybackAudioFrameParametersWithSampleRate:(int)sampleRate channel:(int)channel mode:(AgoraAudioRawFrameOperationMode)mode samplesPerCall:(int)samplesPerCall{
     return 0;
 }
 
@@ -436,14 +456,12 @@ typedef enum : NSUInteger {
 - (void)OnRoomDisconnected:(LVErrorCode)code{
     LV_LOGE(@"OnRoomDisconnected:%d", (int)code);
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
-            [self.delegate rtcEngineConnectionDidLost:self];
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
-            [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateFailed reason:0];
-        }
-        
+//        if ([self.delegate respondsToSelector:@selector(rtcEngineConnectionDidLost:)]) {
+//            [self.delegate rtcEngineConnectionDidLost:self];
+//        }
+//        if ([self.delegate respondsToSelector:@selector(rtcEngine:connectionChangedToState:reason:)]) {
+//            [self.delegate rtcEngine:self connectionChangedToState:AgoraConnectionStateFailed reason:0];
+//        }
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
             [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_RoomDisconnected];
         }
@@ -483,11 +501,24 @@ typedef enum : NSUInteger {
         sample_rate:(int)sample_rate
  number_of_channels:(size_t)number_of_channels
    number_of_frames:(size_t)number_of_frames{
-    [self.observer onPlaybackFrame:(int8_t *)audio_data numOfSamples:(int)number_of_frames bytesPerSample:bits_per_sample channels:(int)number_of_channels samplesPerSec:sample_rate];
+    
+    LinkvAudioFrame *frame = [LinkvAudioFrame new];
+    frame.samplesPerChannel = number_of_frames;
+    frame.channels = number_of_channels;
+    frame.bytesPerSample = 2;
+    frame.samplesPerSec = sample_rate;
+    frame.buffer = [NSData dataWithBytesNoCopy:(void *)audio_data length:2 * number_of_frames freeWhenDone:NO];
+    [self.observer onPlaybackAudioFrame:frame];
 }
 
 - (void)OnAudioMixStream:(const int16_t *)data samples:(int)samples nchannel:(int)nchannel samplesPerChannel:(int)samplesPerChannel flag:(LVAudioRecordType)flag{
-    [self.observer onRecordFrame:(int8_t *)data numOfSamples:samplesPerChannel * 2 bytesPerSample:2 channels:nchannel samplesPerSec:samples];
+    LinkvAudioFrame *frame = [LinkvAudioFrame new];
+    frame.samplesPerChannel = samplesPerChannel;
+    frame.channels = nchannel;
+    frame.bytesPerSample = 2;
+    frame.samplesPerSec = samples;
+    frame.buffer = [NSData dataWithBytesNoCopy:(void *)data length:2 * samplesPerChannel freeWhenDone:NO];
+    [self.observer onRecordAudioFrame:frame];
 }
 
 - (void)OnPublishQualityUpdate:(LVVideoStatistic *)quality{
@@ -571,7 +602,7 @@ typedef enum : NSUInteger {
             [self.delegate rtcEngineConnectionDidLost:self];
         }
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didOccurError:)]) {
-            [self.delegate rtcEngine:self didOccurError:(AgoraErrorCode)LinkvErrorCode_OnKickOff];
+            [self.delegate rtcEngine:self didOccurError:LinkvErrorCode_OnKickOff];
         }
     });
 }

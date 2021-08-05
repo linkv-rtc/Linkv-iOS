@@ -25,7 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rtcEngine:(id<AgoraFunction>)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid;
 
-- (void)rtcEngine:(id<AgoraFunction>)engine didOccurError:(AgoraErrorCode)errorCode;
+/// Linkv 错误回调，遇到此种情况表示 SDK 内部重连失效/或者网络鉴权失败，此时需要切换引擎
+/// 错误码 12010
+- (void)rtcEngine:(id<AgoraFunction>)engine didOccurError:(int)errorCode;
 
 - (void)rtcEngine:(id<AgoraFunction>)engine tokenPrivilegeWillExpire:(NSString *_Nonnull)token;
 
@@ -42,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)rtcEngine:(id<AgoraFunction>)engine didLeaveChannelWithStats:(AgoraChannelStats* _Nonnull)stats;
 
 - (void)rtcEngine:(id<AgoraFunction>)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*>* _Nonnull)speakers totalVolume:(NSInteger)totalVolume;
+
 @end
 
 NS_ASSUME_NONNULL_END
