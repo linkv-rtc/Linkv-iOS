@@ -651,6 +651,25 @@ LV_EXPORT_CLASS
 
 @end
 
+#pragma mark -
+#pragma mark - LVAudioRecordConfig
+
+LV_EXPORT_CLASS
+
+/// 音频录制参数
+@interface LVAudioRecordConfig : NSObject
+
+/// 采样率
+@property (nonatomic) int sampleRate;
+
+/// 通道数
+@property (nonatomic) int channels;
+
+/// 每次回调采样点数量
+@property (nonatomic) int samplesPerCall;
+@end
+
+
 
 #pragma mark -
 #pragma mark - LVMixStreamConfig

@@ -220,7 +220,11 @@ typedef enum : NSUInteger {
 }
 
 -(int)setPlaybackAudioFrameParametersWithSampleRate:(int)sampleRate channel:(int)channel mode:(AgoraAudioRawFrameOperationMode)mode samplesPerCall:(int)samplesPerCall{
-    return 0;
+    LVAudioRecordConfig *config = [[LVAudioRecordConfig alloc]init];
+    config.sampleRate = sampleRate;
+    config.channels = channel;
+    config.samplesPerCall = samplesPerCall;
+    return [[LVRTCEngine sharedInstance] setAudioRecordConfig:config];
 }
 
 -(int)setClientRole:(int)role{

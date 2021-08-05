@@ -494,6 +494,10 @@ LV_EXPORT_CLASS
 /// @return 0 成功，其他失败
 - (int)sendRoomMessage:(NSString *)message;
 
+/// 设置音频录制参数
+/// @param config 音频录制参数
+/// @param 0 成功，其他失败
+- (int)setAudioRecordConfig:(LVAudioRecordConfig*)config;
 @end
 
 @interface LVRTCEngine (LocalRender)
