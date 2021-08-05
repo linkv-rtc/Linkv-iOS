@@ -328,6 +328,15 @@ typedef enum : NSUInteger {
     return 0;
 }
 
+-(int)startRecorder:(int)userId path:(NSString *)path{
+    NSString *uid = [NSString stringWithFormat:@"%d",userId];
+    return [[LVRTCEngine sharedInstance] startRecorder:uid path:path type:(LVRecorderType_AUDIO_AND_VIDEO)];
+}
+
+-(int)stopRecorder:(int)userId{
+    NSString *uid = [NSString stringWithFormat:@"%d",userId];
+    return [[LVRTCEngine sharedInstance] stopRecorder:uid];
+}
 
 #pragma mark - AgoraVideoFrameConsumer
 - (void)consumePixelBuffer:(CVPixelBufferRef _Nonnull)pixelBuffer withTimestamp:(CMTime)timestamp rotation:(AgoraVideoRotation)rotation{

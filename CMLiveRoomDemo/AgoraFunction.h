@@ -71,6 +71,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int)setEnableSpeakerphone:(BOOL)enableSpeaker;
 
+/// 开始视频录制（请以.mkv 目录结尾， 例如：/User/linkv/Desktop/video-1213232.mkv）
+/// @param userId 要录制视频的用户 ID
+/// @param path 视频录制地址
+-(int)startRecorder:(int)userId path:(NSString *)path;
+
+/// 停止视频录制
+/// @param userId 视频对应用户 ID
+-(int)stopRecorder:(int)userId;
+
 @end
 
 NS_ASSUME_NONNULL_END
