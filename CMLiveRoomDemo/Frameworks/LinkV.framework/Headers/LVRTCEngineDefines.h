@@ -653,6 +653,18 @@ LV_EXPORT_CLASS
 
 
 #pragma mark -
+#pragma mark - LVMixStreamConfig
+
+LV_EXPORT_CLASS
+
+/// 网络探测结果
+@interface LVNetworkProbeContent : NSObject
+
+/// 当前网络探测最优节点 RTT 平均值
+@property (nonatomic)int rtt;
+@end
+
+#pragma mark -
 #pragma mark - LVLogger
 
 LV_EXPORT_CLASS

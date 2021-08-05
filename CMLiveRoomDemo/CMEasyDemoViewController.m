@@ -73,6 +73,8 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     self.localView          = nil;
     self.renders            = [NSMutableDictionary new];
     
+    [[LinkvFunction sharedFunction] create:@"" handler:self];
+    
     _currentConfig = [[AgoraVideoEncoderConfiguration alloc]initWithWidth:720 height:1280 frameRate:15 bitrate:1800 orientationMode:(AgoraVideoOutputOrientationModeAdaptative)];
     [[LinkvFunction sharedFunction] setVideoEncoderConfiguration:_currentConfig];
     
@@ -186,7 +188,6 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
         self.isHost = (self.hostSegmented.selectedSegmentIndex == 0);
         self.roomIdText.enabled = NO;
         self.status = kRoomStatus_JOINED;
-        [[LinkvFunction sharedFunction] create:@"" handler:self];
         NSString* room_id = self.roomIdText.text;
         [[LinkvFunction sharedFunction] joinChannelByToken:@"" channelId:room_id info:nil uid:self.userId.intValue joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
             

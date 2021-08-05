@@ -146,6 +146,24 @@ LV_EXPORT_CLASS
 
 @end
 
+@protocol LVVideoFrameCaptureCallback <NSObject>
+
+/// SDK 内部采集数据回调
+/// @param videoFrame 视频原始数据
+/// @return 处理后的视频数据，SDK 内部不会调用 CFRetain 增加引用计数， 会调用 CFRelease 减少引用计数， 视频开发者创建的视频对象
+-(CMSampleBufferRef)OnCaptureVideoFrame:(CMSampleBufferRef)videoFrame;
+
+@end
+
+
+
+@protocol LVRTCProbeNetworkCallback <NSObject>
+
+-(void)OnNetworkProbeContent:(LVNetworkProbeContent *)probeContent;
+
+@end
+
+
 
 #pragma mark -
 #pragma mark - LVRTCEngine
@@ -478,21 +496,22 @@ LV_EXPORT_CLASS
 
 @end
 
-@protocol LVVideoFrameCaptureCallback <NSObject>
-
-/// SDK 内部采集数据回调
-/// @param videoFrame 视频原始数据
-/// @return 处理后的视频数据，SDK 内部不会调用 CFRetain 增加引用计数， 会调用 CFRelease 减少引用计数， 视频开发者创建的视频对象
--(CMSampleBufferRef)OnCaptureVideoFrame:(CMSampleBufferRef)videoFrame;
-
-@end
-
-
 @interface LVRTCEngine (LocalRender)
 
+/// 设置视频采集帧率回调
+/// @param renderCallback 回调代理
 -(void)setVideoFrameCaptureCallback:(id<LVVideoFrameCaptureCallback>)renderCallback;
 
 @end
+
+
+@interface LVRTCEngine (Probe)
+
+/// 设置网络探测结果回调
+/// @param callback 回调代理
+-(void)setNetworkProbeCallback:(id<LVRTCProbeNetworkCallback>)callback;
+@end
+
 
 @interface LVRTCEngine (DEPRECATED)
 

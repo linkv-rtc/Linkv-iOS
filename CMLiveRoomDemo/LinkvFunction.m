@@ -37,7 +37,7 @@ typedef enum : NSUInteger {
 
 @end
 
-@interface LinkvFunction ()<LVRTCEngineDelegate>
+@interface LinkvFunction ()<LVRTCEngineDelegate, LVRTCProbeNetworkCallback>
 @property (nonatomic,weak)id<IRtcEventManager> delegate;
 @property (nonatomic,weak)id<AudioFrameObserver> observer;
 @property (nonatomic,weak)id<AgoraVideoSourceProtocol> source;
@@ -62,6 +62,7 @@ typedef enum : NSUInteger {
     NSMutableArray *_viewModels;
     int64_t _startTime;
     LinkvJoinCompletion _completion;
+    BOOL  _isFaceCamera;
 }
 
 +(instancetype)sharedFunction{
@@ -73,9 +74,15 @@ typedef enum : NSUInteger {
     return _function;
 }
 
+-(void)OnNetworkProbeContent:(LVNetworkProbeContent *)probeContent{
+    LV_LOGI(@"OnNetworkProbeContent, rtt:%d", probeContent.rtt);
+}
+
 -(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
     self.delegate = handler;
     _viewModels = [NSMutableArray new];
+    _isFaceCamera = YES;
+    [[LVRTCEngine sharedInstance] setNetworkProbeCallback:self];
     return self;
 }
 
@@ -85,7 +92,7 @@ typedef enum : NSUInteger {
         completion(YES, uuid);
     }
     else{
-        bool isTest = true;
+        bool isTest = false;
         [LVRTCEngine setUseTestEnv:isTest];
         NSString *appId = isTest ? TEST_ENVIR : PRODUCT;
         NSString *skStr = isTest ? TEST_ENVIR_SIGN : PRODUCT_SIGN;
@@ -317,6 +324,7 @@ typedef enum : NSUInteger {
 }
 
 -(int)switchCamera{
+    _isFaceCamera = !_isFaceCamera;
     return 0;
 }
 
@@ -359,7 +367,7 @@ typedef enum : NSUInteger {
         default:
             break;
     }
-    [[LVRTCEngine sharedInstance] handleVideoFrame:processedSampleBuffer rotation:lvRotation isFaceCamera:NO];
+    [[LVRTCEngine sharedInstance] handleVideoFrame:processedSampleBuffer rotation:lvRotation isFaceCamera:_isFaceCamera];
     CFRelease(processedSampleBuffer);
 }
 
