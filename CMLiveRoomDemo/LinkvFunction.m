@@ -50,6 +50,7 @@ typedef enum : NSUInteger {
     int _clientRole;
     int _clientProfile;
     int _currentUserId;
+    int _userCount;
     NSString *_channelId;
     AgoraChannelStats *_lastStats;
     LVRTCDisplayView *_remoteDisplayView;
@@ -208,7 +209,6 @@ typedef enum : NSUInteger {
 }
 
 - (int)joinChannelByToken:(NSString* _Nullable)token channelId:(NSString* _Nonnull)channelId info:(NSString* _Nullable)info uid:(NSUInteger)uid joinSuccess:(void (^_Nullable)(NSString* _Nonnull channel, NSUInteger uid, NSInteger elapsed))joinSuccessBlock{
-    
     NSString *userId = [NSString stringWithFormat:@"%d", (int)uid];
     bool isHost = false;
     _channelId = channelId;
@@ -239,6 +239,7 @@ typedef enum : NSUInteger {
     _firstFrameReported = false;
     _firstFramePublishReported = false;
     _roomState = LinkvRoomStateIdle;
+    _userCount = 0;
     @synchronized (self) {
         for (HinowView *model in _viewModels) {
             [[LVRTCEngine sharedInstance] removeDisplayView:model.linkv];
@@ -376,15 +377,17 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnEnterRoomComplete:(LVErrorCode)code users:(nullable NSArray<LVUser*>*)users{
-    if (_completion) {
-        _completion(_channelId, _currentUserId, 0);
-    }
-    _completion = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (_completion) {
+            _completion(_channelId, _currentUserId, 0);
+        }
+        _completion = nil;
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinChannel:withUid:elapsed:)]) {
             [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
         }
     });
+    
+    _userCount = (int)users.count;
     
     for (LVUser *user in users) {
         int uid = [user.userId intValue];
@@ -438,10 +441,12 @@ typedef enum : NSUInteger {
             [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
         }
     });
+    _userCount ++;
     [[LVRTCEngine sharedInstance] startPlayingStream:user.userId];
 }
 
 - (void)OnDeleteRemoter:(NSString*)userId{
+    _userCount --;
     [[LVRTCEngine sharedInstance] stopPlayingStream:userId];
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
@@ -476,13 +481,17 @@ typedef enum : NSUInteger {
     _lastStats.txBytes += quality.videosentKbytes * 1000;
     _lastStats.txVideoBytes += quality.videosentKbytes * 1000;
     _lastStats.txPacketLossRate = quality.videoLostPercent;
-    _lastStats.userCount = 2;
+    _lastStats.txVideoKBitrate = quality.videoBitratebps/1000;
+    _lastStats.txAudioKBitrate = quality.audioBitratebps/1000;
+    _lastStats.userCount = _userCount;
 }
 
 - (void)OnPlayQualityUpate:(LVVideoStatistic *)quality userId:(NSString*)userId{
     _lastStats.rxBytes += quality.videoreceKbytes * 1000;
     _lastStats.rxVideoBytes += quality.videoreceKbytes * 1000;
     _lastStats.rxPacketLossRate = quality.videoLostPercent;
+    _lastStats.rxAudioKBitrate = quality.audioBitratebps / 1000;
+    _lastStats.rxVideoKBitrate = quality.videoBitratebps / 1000;
 }
 
 - (void)OnPublishStateUpdate:(LVErrorCode)code{
