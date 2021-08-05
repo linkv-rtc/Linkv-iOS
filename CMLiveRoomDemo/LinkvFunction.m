@@ -239,11 +239,8 @@ typedef enum : NSUInteger {
 
 - (int)joinChannelByToken:(NSString* _Nullable)token channelId:(NSString* _Nonnull)channelId info:(NSString* _Nullable)info uid:(NSUInteger)uid joinSuccess:(void (^_Nullable)(NSString* _Nonnull channel, NSUInteger uid, NSInteger elapsed))joinSuccessBlock{
     NSString *userId = [NSString stringWithFormat:@"%d", (int)uid];
-    bool isHost = false;
     _channelId = channelId;
-    if (_clientRole == AgoraClientRoleBroadcaster) {
-        isHost = true;
-    }
+    bool isHost = (_clientRole == AgoraClientRoleBroadcaster);
     _lastStats = [[AgoraChannelStats alloc]init];
     // 增加正在加入中的熟悉，由于首次调用存在鉴权，故需要等鉴权完成之后调用加入房间接口，用户如果未等鉴权成功就离开，则不需要调用加入房间流程
     _roomState = LinkvRoomStateIdle;
