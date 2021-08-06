@@ -99,7 +99,9 @@ typedef enum : NSUInteger {
     _isFaceCamera = YES;
     _probeCompletion = probeCompletion;
     [[LVRTCEngine sharedInstance] setNetworkProbeCallback:self];
-    [self auth:^(BOOL success, NSString *uuid) {}];
+    [self auth:^(BOOL success, NSString *uuid) {
+        LV_LOGI(@"hinow auth result:%d, uuid:%@", success, uuid);
+    }];
     return self;
 }
 
@@ -244,6 +246,7 @@ typedef enum : NSUInteger {
         [[LVRTCEngine sharedInstance] startPublishing];
     }
     self.source = source;
+    LV_LOGI(@"%s", __func__);
     return 0;
 }
 
@@ -257,6 +260,7 @@ typedef enum : NSUInteger {
     _currentUserId = (int)uid;
     _completion = joinSuccessBlock;
     _isJoining = YES;
+    LV_LOGI(@"join channel %@, uid:%@", channelId, @(uid));
     // SDK 仅鉴权一次
     [self auth:^(BOOL success, NSString *uuid) {
         if (success && _isJoining) {
@@ -276,6 +280,7 @@ typedef enum : NSUInteger {
     _firstFramePublishReported = false;
     _roomState = LinkvRoomStateIdle;
     _userCount = 0;
+    LV_LOGI(@"leave channel %@, uid:%@", _channelId, @(_currentUserId));
     @synchronized (self) {
         for (HinowView *model in _viewModels) {
             [[LVRTCEngine sharedInstance] removeDisplayView:model.linkv];
@@ -480,6 +485,7 @@ typedef enum : NSUInteger {
 
 - (void)OnAddRemoter:(LVUser *)user{
     int uid = [user.userId intValue];
+    LV_LOGI(@"%s userId:%@", __func__, user.userId);
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didJoinedOfUid:elapsed:)]) {
             [self.delegate rtcEngine:self didJoinedOfUid:uid elapsed:0];
@@ -491,6 +497,7 @@ typedef enum : NSUInteger {
 
 - (void)OnDeleteRemoter:(NSString*)userId{
     _userCount --;
+    LV_LOGI(@"%s userId:%@", __func__, userId);
     [[LVRTCEngine sharedInstance] stopPlayingStream:userId];
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didOfflineOfUid:reason:)]) {
