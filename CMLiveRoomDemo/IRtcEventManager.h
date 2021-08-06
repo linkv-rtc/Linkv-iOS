@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol IRtcEventManager <NSObject>
 
--(void)rtcEngine:(id<AgoraFunction>)engine firstLocalVideoFramePublished:(NSInteger)elapsed;
+- (void)rtcEngine:(id<AgoraFunction>)engine firstLocalVideoFramePublished:(NSInteger)elapsed;
 
 - (void)rtcEngine:(id<AgoraFunction>)engine didJoinChannel:(NSString *)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
 

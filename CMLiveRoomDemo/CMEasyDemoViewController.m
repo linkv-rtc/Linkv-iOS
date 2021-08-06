@@ -73,7 +73,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     self.localView          = nil;
     self.renders            = [NSMutableDictionary new];
     
-    [[LinkvFunction sharedFunction] create:@"" handler:self];
+    AgoraRtcEngineKit* engine = nil;
+    
+    [[LinkvFunction sharedFunction] create:@"" agora:engine handler:self];
     
     _currentConfig = [[AgoraVideoEncoderConfiguration alloc]initWithWidth:720 height:1280 frameRate:15 bitrate:1800 orientationMode:(AgoraVideoOutputOrientationModeAdaptative)];
     [[LinkvFunction sharedFunction] setVideoEncoderConfiguration:_currentConfig];
