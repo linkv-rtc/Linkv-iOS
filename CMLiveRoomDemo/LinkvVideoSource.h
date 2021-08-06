@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LinkvVideoSource : NSObject <AgoraVideoSourceProtocol>
 @property(strong) id<AgoraVideoFrameConsumer> _Nullable consumer;
 -(void)start;
+-(void)stop;
 @end
 
 NS_ASSUME_NONNULL_END

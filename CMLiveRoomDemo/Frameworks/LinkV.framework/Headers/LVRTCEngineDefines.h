@@ -717,12 +717,12 @@ LV_EXPORT_CLASS
 @end
 
 
-#define LV_LOGV(frmt, ...)    [LVLogger log:(kLVLoggingSeverityVerbose) function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
+#define LV_LOGV(frmt, ...)       [LVLogger log:(kLVLoggingSeverityVerbose) function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
 
-#define LV_LOGE(frmt, ...)      [LVLogger log:(kLVLoggingSeverityError) function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
+#define LV_LOGE(frmt, ...)       [LVLogger log:(kLVLoggingSeverityError)   function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
 
 #define LV_LOGW(frmt, ...)       [LVLogger log:(kLVLoggingSeverityWarning) function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
 
-#define LV_LOGI(frmt, ...)       [LVLogger log:(kLVLoggingSeverityInfo) function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
+#define LV_LOGI(frmt, ...)       [LVLogger log:(kLVLoggingSeverityInfo)    function:__PRETTY_FUNCTION__ format:frmt,##__VA_ARGS__]
 
 NS_ASSUME_NONNULL_END

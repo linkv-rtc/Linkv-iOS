@@ -31,9 +31,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     kRoomStatus_BEAM    = 2
 };
 
-@interface CMEasyDemoViewController ()<IRtcEventManager, AudioFrameObserver>{
+@interface CMEasyDemoViewController ()<IRtcEventManager, AudioFrameObserver, AgoraRtcEngineDelegate>{
     AgoraVideoEncoderConfiguration *_currentConfig;
     LinkvVideoSource *_videoSource;
+    AgoraRtcEngineKit *engine;
 }
 @property (weak, nonatomic) IBOutlet UITextField *          roomIdText;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *   hostSegmented;
@@ -58,6 +59,21 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 
 @implementation CMEasyDemoViewController
 
+-(void)dealloc{
+    [_videoSource stop];
+}
+
+
+-(BOOL)onRecordAudioFrame:(id)frame{
+    return YES;
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit* _Nonnull)engine lastmileProbeTestResult:(AgoraLastmileProbeResult* _Nonnull)result{
+    
+    NSLog(@"%@", result);
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -73,9 +89,29 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     self.localView          = nil;
     self.renders            = [NSMutableDictionary new];
     
-    AgoraRtcEngineKit* engine = nil;
     
-    [[LinkvFunction sharedFunction] create:@"" agora:engine handler:self];
+    AgoraRtcEngineConfig *config = [AgoraRtcEngineConfig new];
+    config.appId = @"3afa993e38084d7c863381884e06e283";
+    config.areaCode = AgoraAreaCodeGLOB;
+    engine = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
+    
+    AgoraLastmileProbeConfig *config1 = [AgoraLastmileProbeConfig new];
+    config1.probeDownlink = YES;
+    config1.probeUplink = YES;
+    config1.expectedUplinkBitrate = 1000 * 1000;
+    config1.expectedDownlinkBitrate = 1000 * 1000;
+    [engine startLastmileProbeTest:config1];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [engine stopLastmileProbeTest];
+        
+    });
+    
+    
+    [[LinkvFunction sharedFunction] create:@"" handler:self probeCompletion:^(LVNetworkProbeContent * _Nonnull content) {
+        
+    }];
     
     _currentConfig = [[AgoraVideoEncoderConfiguration alloc]initWithWidth:720 height:1280 frameRate:15 bitrate:1800 orientationMode:(AgoraVideoOutputOrientationModeAdaptative)];
     [[LinkvFunction sharedFunction] setVideoEncoderConfiguration:_currentConfig];

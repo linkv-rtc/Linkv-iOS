@@ -66,6 +66,7 @@ typedef enum : NSUInteger {
     NSMutableArray *_viewModels;
     int64_t _startTime;
     LinkvJoinCompletion _completion;
+    LinkvNetworkProbeCompletion _probeCompletion;
     BOOL  _isFaceCamera;
     int _authFailedCount;
 }
@@ -82,16 +83,21 @@ typedef enum : NSUInteger {
 -(void)OnNetworkProbeContent:(LVNetworkProbeContent *)probeContent{
     LV_LOGI(@"OnNetworkProbeContent, rtt:%d", probeContent.rtt);
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (_probeCompletion) {
+            _probeCompletion(probeContent);
+        }
+        _probeCompletion = nil;
         if ([self.delegate respondsToSelector:@selector(rtcEngine:onNetworkProbeContent:)]) {
             [self.delegate rtcEngine:self onNetworkProbeContent:probeContent];
         }
     });
 }
 
--(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler{
+-(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler probeCompletion:(LinkvNetworkProbeCompletion)probeCompletion{
     self.delegate = handler;
     _viewModels = [NSMutableArray new];
     _isFaceCamera = YES;
+    _probeCompletion = probeCompletion;
     [[LVRTCEngine sharedInstance] setNetworkProbeCallback:self];
     [self auth:^(BOOL success, NSString *uuid) {}];
     return self;
@@ -611,6 +617,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnMicphoneEnabled:(NSString *)userId enabled:(bool)enabled{
+    LV_LOGI(@"%s userId:%@ enabled:%d",__func__, userId, enabled);
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(rtcEngine:didAudioMuted:byUid:)]) {
             int uid = userId.intValue;
@@ -628,11 +635,11 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnReceivedFirstVideoFrame:(NSString *)userId streamId:(NSString *)streamId{
-    
+    LV_LOGI(@"%s userId:%@",__func__, userId);
 }
 
 - (void)OnReceivedFirstAudioFrame:(NSString *)userId streamId:(NSString *)streamId{
-    
+    LV_LOGI(@"%s userId:%@",__func__, userId);
 }
 
 - (void)OnReceiveRoomMessage:(NSString *)userId message:(NSString *)message{

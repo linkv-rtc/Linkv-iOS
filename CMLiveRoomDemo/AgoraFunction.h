@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class HinowView;
 
+typedef void(^LinkvNetworkProbeCompletion)(LVNetworkProbeContent *content);
+
 @protocol AudioFrameObserver <NSObject>
 
 - (BOOL)onRecordAudioFrame:(id)frame;
@@ -27,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AgoraFunction <NSObject>
 
--(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler;
+-(id<AgoraFunction>)create:(NSString *)appId handler:(id<IRtcEventManager>)handler probeCompletion:(LinkvNetworkProbeCompletion)probeCompletion;
 
 -(void)setLogFilter:(int)filter;
 
