@@ -214,8 +214,9 @@ typedef enum : NSUInteger {
         }
             break;
             
-        default:
+        default:{
             avConfig.videoDegradationPreference = LVVideoDegradationPreference_MAINTAIN_RESOLUTION;
+        }
             break;
     }
     [[LVRTCEngine sharedInstance] setAVConfig:avConfig];
