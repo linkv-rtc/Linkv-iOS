@@ -69,6 +69,10 @@ typedef enum : NSUInteger {
     LinkvNetworkProbeCompletion _probeCompletion;
     BOOL  _isFaceCamera;
     int _authFailedCount;
+    
+    int _totalRtt;
+    int _numberOfCallback;
+    int64_t _publishStartTime;
 }
 
 +(instancetype)sharedFunction{
@@ -260,6 +264,9 @@ typedef enum : NSUInteger {
     _currentUserId = (int)uid;
     _completion = joinSuccessBlock;
     _isJoining = YES;
+    _totalRtt = 0;
+    _numberOfCallback = 0;
+    _publishStartTime = 0;
     LV_LOGI(@"join channel %@, uid:%@", channelId, @(uid));
     // SDK 仅鉴权一次
     [self auth:^(BOOL success, NSString *uuid) {
@@ -289,8 +296,15 @@ typedef enum : NSUInteger {
     }
     if (!_isJoining) return 0;
     _isJoining = NO;
+    _lastStats.gatewayRtt = _numberOfCallback <= 0 ? -1 : (_totalRtt * 1.0 / _numberOfCallback);
+    int64_t now = (NSDate.date.timeIntervalSince1970 * 1000);
+    _lastStats.txVideoKBitrate = (now - _publishStartTime) <= 0.01 ? 0 : (_lastStats.txVideoBytes / ((now - _publishStartTime) / 1000.0) / 1000.0);
+    AgoraChannelStats *stats = _lastStats;
+    _numberOfCallback = 0;
+    _totalRtt = 0;
+    _publishStartTime = 0;
     if (leaveChannelBlock) {
-        leaveChannelBlock(_lastStats);
+        leaveChannelBlock(stats);
     }
     [[LVRTCEngine sharedInstance] logoutRoom:^(LVErrorCode code) {
         LV_LOGI(@"logoutRoom:%ld", (long)code);
@@ -538,6 +552,9 @@ typedef enum : NSUInteger {
 }
 
 - (void)OnPublishQualityUpdate:(LVVideoStatistic *)quality{
+    if (_publishStartTime == 0) {
+        _publishStartTime = (NSDate.date.timeIntervalSince1970 * 1000);
+    }
     _lastStats.gatewayRtt = quality.audioRtt > quality.videoRtt ? quality.videoRtt : quality.audioRtt;
     _lastStats.cpuTotalUsage = quality.cpuusage * 100;
     _lastStats.memoryAppUsageRatio = quality.memoryusage;
@@ -548,6 +565,9 @@ typedef enum : NSUInteger {
     _lastStats.txVideoKBitrate = quality.videoBitratebps/1000;
     _lastStats.txAudioKBitrate = quality.audioBitratebps/1000;
     _lastStats.userCount = _userCount;
+    
+    _totalRtt += _lastStats.gatewayRtt;
+    _numberOfCallback++;
 }
 
 - (void)OnPlayQualityUpate:(LVVideoStatistic *)quality userId:(NSString*)userId{
