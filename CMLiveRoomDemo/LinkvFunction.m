@@ -298,7 +298,7 @@ typedef enum : NSUInteger {
     _isJoining = NO;
     _lastStats.gatewayRtt = _numberOfCallback <= 0 ? -1 : (_totalRtt * 1.0 / _numberOfCallback);
     int64_t now = (NSDate.date.timeIntervalSince1970 * 1000);
-    _lastStats.txVideoKBitrate = (now - _publishStartTime) <= 0.01 ? 0 : (_lastStats.txVideoBytes / ((now - _publishStartTime) / 1000.0) / 1000.0);
+    _lastStats.txVideoKBitrate = (now - _publishStartTime) <= 0.01 ? 0 : (_lastStats.txVideoBytes / ((now - _publishStartTime) / 1000.0) / 1000.0) * 8;
     AgoraChannelStats *stats = _lastStats;
     _numberOfCallback = 0;
     _totalRtt = 0;
