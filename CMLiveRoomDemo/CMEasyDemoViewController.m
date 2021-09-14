@@ -68,6 +68,10 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     return YES;
 }
 
+-(BOOL)onPlaybackAudioFrame:(id)frame{
+    return YES;
+}
+
 - (void)rtcEngine:(AgoraRtcEngineKit* _Nonnull)engine lastmileProbeTestResult:(AgoraLastmileProbeResult* _Nonnull)result{
     
     NSLog(@"%@", result);
@@ -102,11 +106,11 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
     config1.expectedDownlinkBitrate = 1000 * 1000;
     [engine startLastmileProbeTest:config1];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [engine stopLastmileProbeTest];
-        
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//
+//        [engine stopLastmileProbeTest];
+//
+//    });
     
     
     [[LinkvFunction sharedFunction] create:@"" handler:self probeCompletion:^(LVNetworkProbeContent * _Nonnull content) {
@@ -151,6 +155,9 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [[LinkvFunction sharedFunction] leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
+            
+    }];
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

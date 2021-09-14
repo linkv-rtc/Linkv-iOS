@@ -494,10 +494,34 @@ LV_EXPORT_CLASS
 /// @return 0 成功，其他失败
 - (int)sendRoomMessage:(NSString *)message;
 
+/// 调节麦克风采集信号音量。
+/// @param volume 麦克风采集信号音量。取值范围为 [0,100]。默认值为 100，表示原始音量。
+/// @return 0: 方法调用成功。 !0: 方法调用失败。
+- (int)adjustRecordingSignalVolume:(int)volume;
+
+/// 关闭远端某路视频
+/// @param userId 待关闭视频路的 userId
+/// @param mute 是否关闭
+/// @return 0: 成功  !0: 失败
+- (int)muteRemoteVideoStream:(NSString *)userId mute:(bool)mute;
+
+/// 关闭远端某路音频
+/// @param userId 待关闭音频路的 userId
+/// @param mute 是否关闭
+/// @return 0: 成功  !0: 失败
+- (int)muteRemoteAudioStream:(NSString *)userId mute:(bool)mute;
+
 /// 设置音频录制参数
 /// @param config 音频录制参数
 /// @param 0 成功，其他失败
 - (int)setAudioRecordConfig:(LVAudioRecordConfig*)config;
+
+/// 设置是否自动同步麦克风打开和关闭的状态给远端用户，默认不同步，如果打开同步功能，则麦克风的打开和关闭状态会触发 OnMicphoneEnabled: 回调
+/// 请加入房间接口调用完成之后调用
+/// @param sync true 同步， false 不同步
+/// @return 0: 方法调用成功。 !0: 方法调用失败。
+- (int)autoSyncMicrophoneState:(bool)sync;
+
 @end
 
 @interface LVRTCEngine (LocalRender)

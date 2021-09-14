@@ -452,7 +452,7 @@ typedef enum : NSUInteger {
             [self.delegate rtcEngine:self didJoinChannel:_channelId withUid:_currentUserId elapsed:0];
         }
     });
-    
+    [[LVRTCEngine sharedInstance] autoSyncMicrophoneState:true];
     _userCount = (int)users.count;
     
     for (LVUser *user in users) {
@@ -549,7 +549,12 @@ typedef enum : NSUInteger {
     frame.bytesPerSample = 2;
     frame.samplesPerSec = samples;
     frame.buffer = [NSData dataWithBytesNoCopy:(void *)data length:2 * samplesPerChannel freeWhenDone:NO];
-    [self.observer onRecordAudioFrame:frame];
+    if (flag == LVAudioRecordTypeMicrophone) {
+        [self.observer onRecordAudioFrame:frame];
+    }
+    else {
+        [self.observer onPlaybackAudioFrame:frame];
+    }
 }
 
 - (void)OnPublishQualityUpdate:(LVVideoStatistic *)quality{

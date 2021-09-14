@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, RoomStatus) {
         make.bottom.equalTo(self.lookButton.mas_top).offset(-30);
     }];
     
-    BOOL enableEasyDemo = NO;
+    BOOL enableEasyDemo = YES;
     if (enableEasyDemo) {
         UITapGestureRecognizer *tapGestureClick = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(easyDemoClick)];
         tapGestureClick.numberOfTapsRequired = 5;
